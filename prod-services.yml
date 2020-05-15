@@ -1,0 +1,61 @@
+apps:
+  - name: api
+    script: dotnet Zeta.Application.WebGateway.dll
+    cwd: ../Zeta.Application.WebGateway/src/Zeta.Application.WebGateway/bin/release/netcoreapp2.2/publish
+    max_restarts: 3
+    env:
+      ASPNETCORE_URLS: http://*:5000
+  - name: availability
+    script: dotnet Zeta.Availability.Application.Web.dll
+    cwd: ../Zeta.Availability/src/Zeta.Availability.Application.Web/bin/release/netcoreapp2.2/publish
+    max_restarts: 3
+    env:
+      ASPNETCORE_URLS: http://*:5001
+  - name: customers
+    script: dotnet Zeta.Customers.Application.Web.dll
+    cwd: ../Zeta.Customers/src/Zeta.Customers.Application.Web/bin/release/netcoreapp2.2/publish
+    max_restarts: 3
+    env:
+      ASPNETCORE_URLS: http://*:5002
+  - name: deliveries
+    script: dotnet Zeta.Deliveries.Application.Web.dll
+    cwd: ../Zeta.Deliveries/src/Zeta.Deliveries.Application.Web/bin/release/netcoreapp2.2/publish
+    max_restarts: 3
+    env:
+      ASPNETCORE_URLS: http://*:5003
+  - name: identity
+    script: dotnet Zeta.Identity.Application.Web.dll
+    cwd: ../Zeta.Identity/src/Zeta.Identity.Application.Web/bin/release/netcoreapp2.2/publish
+    max_restarts: 3
+    env:
+      ASPNETCORE_URLS: http://*:5004
+  - name: operations
+    script: dotnet Zeta.Operations.Application.Web.dll
+    cwd: ../Zeta.Operations/src/Zeta.Operations.Application.Web/bin/release/netcoreapp2.2/publish
+    max_restarts: 3
+    env:
+      ASPNETCORE_URLS: http://*:5005
+  - name: orders
+    script: dotnet Zeta.Orders.Application.Web.dll
+    cwd: ../Zeta.Orders/src/Zeta.Orders.Application.Web/bin/release/netcoreapp2.2/publish
+    max_restarts: 3
+    env:
+      ASPNETCORE_URLS: http://*:5006
+  - name: parcels
+    script: dotnet Zeta.Parcels.Application.Web.dll
+    cwd: ../Zeta.Parcels/src/Zeta.Parcels.Application.Web/bin/release/netcoreapp2.2/publish
+    max_restarts: 3
+    env:
+      ASPNETCORE_URLS: http://*:5007
+  - name: pricing
+    script: dotnet Zeta.Pricing.Application.Web.dll
+    cwd: ../Zeta.Pricing/src/Zeta.Pricing.Application.Web/bin/release/netcoreapp2.2/publish
+    max_restarts: 3
+    env:
+      ASPNETCORE_URLS: http://*:5008
+  - name: vehicles
+    script: dotnet Zeta.Vehicles.Application.Web.dll
+    cwd: ../Zeta.Vehicles/src/Zeta.Vehicles.Application.Web/bin/release/netcoreapp2.2/publish
+    max_restarts: 3
+    env:
+      ASPNETCORE_URLS: http://*:5009

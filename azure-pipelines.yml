@@ -1,0 +1,57 @@
+variables:
+  dockerImagesPush: true
+  azureSubscription: 'GlobalDocker 9f5f154e-0b5a-440f-811e-98f8295193a4'
+  azureContainerRegistry: '{"loginServer":"globaldockerregistry.azurecr.io", "id" : "/subscriptions/9f5f154e-0b5a-440f-811e-98f8295193a4/resourceGroups/globaldocker/providers/Microsoft.ContainerRegistry/registries/globaldockerregistry"}'
+  vmImage: 'ubuntu-latest' # needed for linux container build/push https://stackoverflow.com/questions/57732505/run-linux-containers-in-an-azure-devops-windows-hosted-build-agent
+
+trigger:
+- master
+- develop
+- refs/tags/v*
+
+resources:
+- repo: self
+  fetchDepth: 1
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build job
+    pool:
+      vmImage: $(vmImage)
+    steps:
+    - task: GitVersion@5 # alternative https://github.com/adamralph/minver
+      displayName: Apply git version
+
+    - task: DockerCompose@0 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/docker-compose?view=azure-devops
+      displayName: Docker build images
+      inputs:
+        action: 'Build services'
+        containerregistrytype: 'Azure Container Registry'
+        azureSubscription: $(azureSubscription)
+        azureContainerRegistry: $(azureContainerRegistry)
+        dockerComposeFile: '$(System.DefaultWorkingDirectory)/docker-compose.yml'
+        additionalDockerComposeFiles: '$(System.DefaultWorkingDirectory)/docker-compose.override.yml'
+        includeLatestTag: true
+        additionalImageTags: $(GitVersion.NuGetVersionV2)
+
+    - task: DockerCompose@0 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/docker-compose?view=azure-devops
+      displayName: Docker push images
+      enabled: true
+      condition: |
+        and
+        (
+           eq(variables['dockerImagesPush'], 'true'),
+           eq(variables['Build.SourceBranch'], 'refs/heads/master')
+        )
+      inputs:
+        action: 'Push services'
+        containerregistrytype: 'Azure Container Registry'
+        azureSubscription: $(azureSubscription)
+        azureContainerRegistry: $(azureContainerRegistry)
+        dockerComposeFile: '$(System.DefaultWorkingDirectory)/docker-compose.yml'
+        additionalDockerComposeFiles: '$(System.DefaultWorkingDirectory)/docker-compose.override.yml'
+        includeLatestTag: true
+        additionalImageTags: $(GitVersion.NuGetVersionV2)

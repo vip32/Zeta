@@ -1,0 +1,20 @@
+version: '3.5'
+
+services:
+  apigateway.application.web:
+    image: ${REGISTRY:-zeta}/apigateway.application.web:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: services/ApiGateway/src/ApiGateway.Application.Web/Dockerfile
+
+  customers.application.web:
+    image: ${REGISTRY:-zeta}/customers.application.web:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: services/Customers/src/Customers.Application.Web/Dockerfile
+
+  orders.application.web:
+    image: ${REGISTRY:-zeta}/orders.application.web:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: services/Orders/src/Orders.Application.Web/Dockerfile

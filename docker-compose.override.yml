@@ -1,0 +1,201 @@
+version: '3.5'
+
+services:
+  # ============= SAMPLE SERVICES ======================================================================================================
+  # ===================================================================================================================================
+  apigateway.application.web:
+    container_name: zeta_application_apigateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_HTTPS_PORT=6100
+    restart: unless-stopped
+    ports:
+      - 6000:80
+      - 6100:443
+#    healthcheck:
+#      test: ["CMD", "curl", "-sS", "http://127.0.0.1"]
+#      test: curl -sS http://127.0.0.1 || exit 1
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  customers.application.web:
+    container_name: zeta_application_customers
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+    restart: unless-stopped
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost/health"]
+    ports:
+      - 6001:80 # The API Gateway redirects and access through the internal port (80)
+                # In a production environment the external port (5002) should be removed, kept here for microservice debugging purposes
+
+  orders.application.web:
+    container_name: zeta_application_orders
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+    restart: unless-stopped
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost/health"]
+    ports:
+      - 6002:80 # The API Gateway redirects and access through the internal port (80)
+                # In a production environment the external port (5006) should be removed, kept here for microservice debugging purposes
+
+  # ============= INFRASTRUCTURE ======================================================================================================
+  # ===================================================================================================================================
+  mssql:
+    image: mcr.microsoft.com/mssql/server
+    container_name: zeta_mssql
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Abcd1234! # Server=mssql;Database=sample;User=sa;Password=Abcd1234!;Trusted_Connection=False;MultipleActiveResultSets=True;
+      - MSSQL_PID=Developer
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P 'Abcd1234!' -Q 'select 1'
+    ports:
+      - 1433:1433
+    volumes:
+      - mssql:/var/opt/mssql
+
+  mssqlscripts:
+    image: mcr.microsoft.com/mssql-tools
+    container_name: zeta_mssqlscripts
+    depends_on:
+      - mssql
+    command: /bin/bash -c 'until /opt/mssql-tools/bin/sqlcmd -S mssql -U sa -P "Abcd1234!" -Q "create database Keycloak"; do sleep 5; done'
+
+  mongo:
+    image: mongo:latest
+    container_name: zeta_mongo   # mongodb://mongo:27017,db2.example.net:2500/?connectTimeoutMS=300000
+    restart: unless-stopped
+    hostname: mongodb
+    ports:
+      - 27017:27017
+    healthcheck:
+      # initiate the replica set https://zgadzaj.com/development/docker/docker-compose/turning-standalone-mongodb-server-into-a-replica-set-with-docker-compose
+      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --quiet) -eq 1
+      interval: 10s
+      start_period: 30s
+#    healthcheck:
+#      test: echo 'db.runCommand("ping").ok' | mongo mongo:27017/test --quiet 1
+#      interval: 10s
+#      timeout: 10s
+#      retries: 5
+#      start_period: 20s
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+    volumes:
+      - mongo:/data/db
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: zeta_mongo-express
+    depends_on:
+      - mongo
+    restart: unless-stopped
+    ports:
+      - 8081:8081 # http://localhost:8081/
+
+  eventstore:
+    image: eventstore/eventstore
+    container_name: zeta_eventstore
+    restart: unless-stopped
+    environment:
+      - EVENTSTORE_RUN_PROJECTIONS=All
+      - EVENTSTORE_START_STANDARD_PROJECTIONS=true
+    ports:
+      - 2113:2113 # http://localhost:2113/ admin/changeit
+      - 1113:1113
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: zeta_rabbitmq
+    restart: unless-stopped
+    ports:
+      - 5672:5672
+      - 15672:15672 # http://localhost:15672
+    # volumes:
+    #   - rabbitmq:/var/lib/rabbitmq
+
+  jaeger:
+    image: jaegertracing/all-in-one
+    container_name: zeta_jaeger
+    restart: unless-stopped
+    ports:
+      - 5775:5775/udp
+      - 5778:5778
+      - 6831:6831/udp
+      - 6832:6832/udp
+      # - 9411:9411
+      - 14268:14268
+      - 16686:16686 # http://localhost:16686/search
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zeta_zipkin
+    restart: unless-stopped
+    environment:
+      - STORAGE_TYPE=mem # more here https://github.com/openzipkin-attic/docker-zipkin mysql: https://www.linode.com/docs/uptime/analytics/zipkin-server-configuration-using-docker-and-mysql/
+      # Uncomment to disable scribe
+      # - SCRIBE_ENABLED=false
+      # Uncomment to enable self-tracing
+      # - SELF_TRACING_ENABLED=true
+      # Uncomment to enable debug logging
+      # - JAVA_OPTS=-Dlogging.level.zipkin=DEBUG
+    healthcheck:
+      test: wget -O health.json http://127.0.0.1:9411/health || exit 1
+    ports:
+      - 9411:9411 # http://localhost:9411/zipkin/
+
+  keycloak:
+    image: jboss/keycloak
+    container_name: zeta_keycloak
+    restart: unless-stopped
+    depends_on:
+      - mssql
+      - mssqlscripts
+    ports:
+      - 8080:8080 # http://localhost:8080 (admin/admin)
+    volumes:
+      - ./tools/imports:/opt/jboss/keycloak/imports
+    command:
+      - "-b 0.0.0.0 -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=/opt/jboss/keycloak/imports/keycloak-realm-export.json -Dkeycloak.migration.strategy=OVERWRITE_EXISTING -Dkeycloak.profile.feature.upload_scripts=enabled"
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=mssql # https://github.com/keycloak/keycloak-containers/tree/master/docker-compose-examples
+      - DB_USER=sa
+      - DB_PASSWORD=Abcd1234!
+      - DB_ADDR=mssql
+      - DB_DATABASE=Keycloak
+
+  seq:
+    image: datalust/seq:latest
+    container_name: zeta_seq
+    restart: unless-stopped
+    ports:
+      - 5340:80 # http://localhost:5340
+    environment:
+      - ACCEPT_EULA=Y
+
+  consul:
+    image: consul:latest
+    container_name: zeta_consul # clustered: https://github.com/hashicorp/consul/blob/master/demo/docker-compose-cluster/docker-compose.yml
+    ports:
+      - 8500:8500 # http://localhost:8500/ui
+      - 8300:8300
+    volumes:
+      - ./.consul/config:/config
+      - ./.consul/data:/data
+    command: agent -server -data-dir=/data -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect=1 -ui
+
+volumes:
+  mssql:
+    driver: local
+  mongo:
+    driver: local
+  rabbitmq:
+    driver: local

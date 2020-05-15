@@ -1,0 +1,34 @@
+version: '3.5'
+
+services:
+  apigateway.application.web:
+    image: globaldockerregistry.azurecr.io/zeta/apigateway.application.web
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=[PASSWORD]
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ${HOME}/.aspnet/https:/https/
+
+  customers.application.web:
+    image: globaldockerregistry.azurecr.io/zeta/customers.application.web
+    restart: unless-stopped
+    ports:
+      - 6001:80
+
+  orders.application.web:
+    image: globaldockerregistry.azurecr.io/zeta/orders.application.web
+    restart: unless-stopped
+    ports:
+      - 6002:80
+
+#web:
+#  image: nginxdemos/hello
+#  ports:
+#    - 80:80
