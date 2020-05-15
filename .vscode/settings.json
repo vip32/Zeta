@@ -2,5 +2,27 @@
   "files.exclude": {
     "**/bin": true,
     "**/obj": true
-  }
+  },
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#68227a",
+    "activityBar.activeBorder": "#000000",
+    "activityBar.background": "#68227a",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#000000",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "editorGroup.border": "#68227a",
+    "panel.border": "#68227a",
+    "sideBar.border": "#68227a",
+    "statusBar.background": "#461752",
+    "statusBar.border": "#461752",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#68227a",
+    "titleBar.activeBackground": "#461752",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.border": "#461752",
+    "titleBar.inactiveBackground": "#46175299",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#461752"
 }
