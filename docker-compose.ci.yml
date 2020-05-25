@@ -27,8 +27,3 @@ services:
     restart: unless-stopped
     ports:
       - 6002:80
-
-#web:
-#  image: nginxdemos/hello
-#  ports:
-#    - 80:80
