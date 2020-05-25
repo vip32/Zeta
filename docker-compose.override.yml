@@ -226,12 +226,16 @@ services:
 
 volumes:
   mssql:
+    name: zeta_mssql
     driver: local
   mongo:
+    name: zeta_mongo
     driver: local
   rabbitmq:
+    name: zeta_rabbitmq
     driver: local
   consul:
+    name: zeta_consul
     driver: local
 
 networks:
