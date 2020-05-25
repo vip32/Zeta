@@ -74,7 +74,7 @@ services:
     container_name: zeta_mssqlscripts
     depends_on:
       - mssql
-    command: /bin/bash -c 'until /opt/mssql-tools/bin/sqlcmd -S mssql -U sa -P "Abcd1234!" -Q "create database Keycloak"; do sleep 5; done'
+    command: /bin/bash -c 'until /opt/mssql-tools/bin/sqlcmd -S mssql -U sa -P "Abcd1234!" -Q "create database zeta_keycloak"; do sleep 5; done'
     networks:
       - zeta
 
@@ -192,7 +192,7 @@ services:
       - DB_USER=sa
       - DB_PASSWORD=Abcd1234!
       - DB_ADDR=mssql
-      - DB_DATABASE=Keycloak
+      - DB_DATABASE=zeta_keycloak
     networks:
       - zeta
 
