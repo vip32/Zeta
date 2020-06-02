@@ -52,6 +52,19 @@ services:
 
   # ============= INFRASTRUCTURE ======================================================================================================
   # ===================================================================================================================================
+
+#  portainer:
+#    image: portainer/portainer
+#    container_name: portainer
+#    restart: always
+#    ports:
+#      - 9000:9000 # http://localhost:9000
+#    networks:
+#      - zeta
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - portainer:/data portainer/portainer
+
   mssql:
     image: mcr.microsoft.com/mssql/server
     container_name: zeta_mssql
@@ -204,6 +217,8 @@ services:
       - 5340:80 # http://localhost:5340
     environment:
       - ACCEPT_EULA=Y
+    volumes:
+      - seq:/data
     networks:
     - zeta
 
@@ -224,6 +239,54 @@ services:
     networks:
       - zeta
 
+#  fabio:
+#    image: fabiolb/fabio
+#    container_name: fabio
+#    restart: unless-stopped
+#    environment:
+#      - FABIO_REGISTRY_CONSUL_ADDR=consul:8500
+#    networks:
+#      - zeta
+#    ports:
+#      - 9998:9998
+#      - 9999:9999
+
+#  vault:
+#    image: vault
+#    container_name: vault
+#    restart: unless-stopped
+#    ports:
+#      - 8200:8200 # http://localhost:8200
+#    networks:
+#      - zeta
+#    environment:
+#      - VAULT_ADDR=http://127.0.0.1:8200
+#      - VAULT_DEV_ROOT_TOKEN_ID=secret
+#    cap_add:
+#      - IPC_LOCK
+
+#  redis:
+#    image: redis
+#    container_name: redis
+#    restart: unless-stopped
+#    ports:
+#      - 6379:6379
+#    networks:
+#      - zeta
+#    volumes:
+#      - redis:/data
+
+#  grafana:
+#    image: grafana/grafana
+#    container_name: grafana
+#    restart: unless-stopped
+#    ports:
+#      - 3000:3000
+#    networks:
+#      - zeta
+#    # volumes:
+#    #   - grafana:/var/lib/grafana
+
 volumes:
   mssql:
     name: zeta_mssql
@@ -237,6 +300,11 @@ volumes:
   consul:
     name: zeta_consul
     driver: local
+  seq:
+    name: zeta_seq
+    driver: local
+#  portainer:
+#    driver: local
 
 networks:
   zeta:
