@@ -75,6 +75,11 @@ GET https://localhost:6100/customers/api/echo HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
+### API get Customers Service echo (Direct)                                       #
+GET http://localhost:6001/api/echo HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
 ###################################################################################
 ### API get Orders Service health                                                 #
 GET https://localhost:6100/orders/health HTTP/1.1
@@ -82,5 +87,10 @@ Content-Type: application/json
 
 ### API get Orders Service echo                                                   #
 GET https://localhost:6100/orders/api/echo HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+### API get Orders Service echo (Direct)                                          #
+GET http://localhost:6002/api/echo HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
