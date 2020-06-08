@@ -1,4 +1,4 @@
-﻿namespace Zeta.ApiGateway.Application.Web
+﻿namespace Zeta.ApiGateway.Presentation.Web
 {
     using System;
     using System.IO;
@@ -10,7 +10,7 @@
 
     public static class Program
     {
-        public static readonly string AppName = typeof(Program).Namespace.Replace("Zeta.", string.Empty, StringComparison.OrdinalIgnoreCase).Replace(".Application.Web", string.Empty, StringComparison.OrdinalIgnoreCase);
+        public static readonly string AppName = typeof(Program).Namespace.Replace("Zeta.", string.Empty, StringComparison.OrdinalIgnoreCase).Replace(".Presentation.Web", string.Empty, StringComparison.OrdinalIgnoreCase);
 
         public static int Main(string[] args)
         {

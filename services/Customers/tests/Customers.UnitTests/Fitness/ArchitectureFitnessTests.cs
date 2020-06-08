@@ -132,13 +132,13 @@
 //        }
 
 //        [Fact]
-//        public void Fitness_Applicaiton_Should_Not_Reference_Application_Web()
+//        public void Fitness_Applicaiton_Should_Not_Reference_Presentation_Web()
 //        {
 //            Types.InCurrentDomain()
 //                .That()
-//                .ResideInNamespace($"{this.baseNamespace}.Application")
+//                .ResideInNamespace($"{this.baseNamespace}.Presentation")
 //                .ShouldNot()
-//                .HaveDependencyOn($"{this.baseNamespace}.Application.Web")
+//                .HaveDependencyOn($"{this.baseNamespace}.Presentation.Web")
 //                .GetResult().IsSuccessful.ShouldBeTrue();
 //        }
 //    }

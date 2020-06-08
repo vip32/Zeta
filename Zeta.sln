@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.29311.281
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{020594E5-5CEC-4E0E-89B9-230555C36B89}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Customers.Application.Web", "services\Customers\src\Customers.Application.Web\Customers.Application.Web.csproj", "{92397745-EB7A-4CEB-95ED-CB572A9182A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Customers.Presentation.Web", "services\Customers\src\Customers.Presentation.Web\Customers.Presentation.Web.csproj", "{92397745-EB7A-4CEB-95ED-CB572A9182A8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orders.Application.Web", "services\Orders\src\Orders.Application.Web\Orders.Application.Web.csproj", "{F8B4D4AC-DCAC-4918-ADEA-3A9690C0198B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orders.Presentation.Web", "services\Orders\src\Orders.Presentation.Web\Orders.Presentation.Web.csproj", "{F8B4D4AC-DCAC-4918-ADEA-3A9690C0198B}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{0F0A2887-4491-41CC-AD9A-E855A0547D3A}"
 EndProject
@@ -28,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{25F5DD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", "{C66656C1-33F5-486A-A069-56ED2BF9EA47}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway.Application.Web", "services\ApiGateway\src\ApiGateway.Application.Web\ApiGateway.Application.Web.csproj", "{2A3E0BE4-F6B5-4C71-9752-CDBC66446F1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway.Presentation.Web", "services\ApiGateway\src\ApiGateway.Presentation.Web\ApiGateway.Presentation.Web.csproj", "{2A3E0BE4-F6B5-4C71-9752-CDBC66446F1A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Customers.Application", "services\Customers\src\Customers.Application\Customers.Application.csproj", "{B4DD7B68-4908-49FC-ACD8-564B56F93897}"
 EndProject

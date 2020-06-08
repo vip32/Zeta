@@ -1,8 +1,8 @@
 version: '3.5'
 
 services:
-  apigateway.application.web:
-    image: globaldockerregistry.azurecr.io/zeta/apigateway.application.web
+  apigateway.presentation.web:
+    image: globaldockerregistry.azurecr.io/zeta/apigateway.presentation.web
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+;http://+
@@ -16,14 +16,14 @@ services:
     volumes:
       - ${HOME}/.aspnet/https:/https/
 
-  customers.application.web:
-    image: globaldockerregistry.azurecr.io/zeta/customers.application.web
+  customers.presentation.web:
+    image: globaldockerregistry.azurecr.io/zeta/customers.presentation.web
     restart: unless-stopped
     ports:
       - 6001:80
 
-  orders.application.web:
-    image: globaldockerregistry.azurecr.io/zeta/orders.application.web
+  orders.presentation.web:
+    image: globaldockerregistry.azurecr.io/zeta/orders.presentation.web
     restart: unless-stopped
     ports:
       - 6002:80

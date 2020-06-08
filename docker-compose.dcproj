@@ -7,7 +7,7 @@
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <!--<DockerServiceUrl>{Scheme}://localhost:{ServicePort}/api/values</DockerServiceUrl>-->
     <DockerServiceUrl>https://localhost:6100</DockerServiceUrl>
-    <DockerServiceName>apigateway.application.web</DockerServiceName>
+    <DockerServiceName>apigateway.presentation.web</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.ci.yml">

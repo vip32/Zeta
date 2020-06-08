@@ -1,4 +1,4 @@
-﻿namespace Zeta.ApiGateway.Application.Web.Controllers
+﻿namespace Zeta.ApiGateway.Presentation.Web.Controllers
 {
     using System.ComponentModel;
     using System.Linq;

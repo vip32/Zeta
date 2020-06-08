@@ -336,15 +336,15 @@ grant_type=password
 
 #### ApiGateway
 - health: https://localhost:6100/health
-    - https://customers.application.web/health (port 80)
-    - https://orders.application.web/health (port 80)
+    - https://customers.presentation.web/health (port 80)
+    - https://orders.presentation.web/health (port 80)
 
 #### Customers
-- api gateway: https://localhost:6100/customers/api/values -> https://customers.application.web/api/values (port 80)
+- api gateway: https://localhost:6100/customers/api/values -> https://customers.presentation.web/api/values (port 80)
 - local:  http://localhost:5002/api/values (debugging only)
 
 #### Orders
-- api gateway: https://localhost:6100/customers/api/values -> https://orders.application.web/api/values (port 80)
+- api gateway: https://localhost:6100/customers/api/values -> https://orders.presentation.web/api/values (port 80)
 - local:  http://localhost:5006/api/values (debugging only)
 
 ----------------------------------------------------------------------------
@@ -417,8 +417,8 @@ grant_type=password
 version: '3.4'
 
 services:
-  apigateway.application.web:
-    image: globaldockerregistry.azurecr.io/zeta/apigateway.application.web
+  apigateway.presentation.web:
+    image: globaldockerregistry.azurecr.io/zeta/apigateway.presentation.web
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+;http://+
@@ -431,13 +431,13 @@ services:
     volumes:
       - ${HOME}/.aspnet/https:/https/ # dev cert
 
-  customers.application.web:
-    image: globaldockerregistry.azurecr.io/zeta/customers.application.web
+  customers.presentation.web:
+    image: globaldockerregistry.azurecr.io/zeta/customers.presentation.web
     ports:
       - 6001:80
 
-  orders.application.web:
-    image: globaldockerregistry.azurecr.io/zeta/orders.application.web
+  orders.presentation.web:
+    image: globaldockerregistry.azurecr.io/zeta/orders.presentation.web
     ports:
       - 6002:80
 
@@ -448,8 +448,8 @@ services:
 ```
 
 - `sudo docker login -u [USERNAME] -p [PASSWORD] globaldockerregistry.azurecr.io` # login to registry
-- `sudo docker pull globaldockerregistry.azurecr.io/zeta/orders.application.web` # test
-- `sudo docker rmi globaldockerregistry.azurecr.io/zeta/orders.application.web` # test
+- `sudo docker pull globaldockerregistry.azurecr.io/zeta/orders.presentation.web` # test
+- `sudo docker rmi globaldockerregistry.azurecr.io/zeta/orders.presentation.web` # test
 - `sudo docker-compose up -d` # start the docker-compose.yml
 
 - remote client: browse to http://[vmIP] (apigateway) # verify

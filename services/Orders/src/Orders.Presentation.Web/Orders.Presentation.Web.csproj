@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-	  <AssemblyName>Zeta.Orders.Application.Web</AssemblyName>
-    <RootNamespace>Zeta.Orders.Application.Web</RootNamespace>
+	  <AssemblyName>Zeta.Orders.Presentation.Web</AssemblyName>
+    <RootNamespace>Zeta.Orders.Presentation.Web</RootNamespace>
     <UserSecretsId>b8c78099-1d9b-47ee-8b02-98757e47143d</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..\..</DockerfileContext>

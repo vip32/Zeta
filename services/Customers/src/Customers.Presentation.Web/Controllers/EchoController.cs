@@ -1,4 +1,4 @@
-﻿namespace Zeta.Orders.Application.Web.Controllers
+﻿namespace Zeta.Customers.Presentation.Web.Controllers
 {
     using System.ComponentModel;
     using System.Linq;

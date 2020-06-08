@@ -1,4 +1,4 @@
-﻿namespace Zeta.Orders.Application.Web.Controllers
+﻿namespace Zeta.Customers.Presentation.Web.Controllers
 {
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc;
@@ -11,7 +11,7 @@
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "order1", "order2", "order3" };
+            return new string[] { "customer1", "customer2" };
         }
 
         // GET api/values/5

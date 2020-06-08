@@ -1,4 +1,4 @@
-﻿namespace Zeta.Customers.Application
+﻿namespace Zeta.Customers.Presentation
 {
     public class CompositionRoot
     {

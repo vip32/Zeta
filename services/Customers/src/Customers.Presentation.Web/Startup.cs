@@ -1,4 +1,4 @@
-﻿namespace Zeta.Customers.Application.Web
+﻿namespace Zeta.Customers.Presentation.Web
 {
     using System;
     using HealthChecks.UI.Client;

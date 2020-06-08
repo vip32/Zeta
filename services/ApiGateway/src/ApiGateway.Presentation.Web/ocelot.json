@@ -5,7 +5,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "customers.application.web",
+          "Host": "customers.presentation.web",
           "Port": 80
         }
       ],
@@ -17,7 +17,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "orders.application.web",
+          "Host": "orders.presentation.web",
           "Port": 80
         }
       ],

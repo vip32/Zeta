@@ -3,8 +3,8 @@ version: '3.5'
 services:
   # ============= SAMPLE SERVICES ======================================================================================================
   # ===================================================================================================================================
-  apigateway.application.web:
-    container_name: zeta_application_apigateway
+  apigateway.presentation.web:
+    container_name: zeta_presentation_apigateway
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -22,8 +22,8 @@ services:
     networks:
       - zeta
 
-  customers.application.web:
-    container_name: zeta_application_customers
+  customers.presentation.web:
+    container_name: zeta_presentation_customers
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -36,8 +36,8 @@ services:
     networks:
       - zeta
 
-  orders.application.web:
-    container_name: zeta_application_orders
+  orders.presentation.web:
+    container_name: zeta_presentation_orders
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80

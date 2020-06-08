@@ -1,4 +1,4 @@
-﻿namespace Zeta.ApiGateway.Application.Web
+﻿namespace Zeta.ApiGateway.Presentation.Web
 {
     using System;
     using HealthChecks.UI.Client;
@@ -41,8 +41,8 @@
         {
             services.AddHealthChecks()
                 .AddCheck("self", () => HealthCheckResult.Healthy(), tags: new[] { "live" })
-                .AddUrlGroup(new Uri("http://customers.application.web/health"), name: "customers.application.web", tags: new string[] { "customers.application.web" })
-                .AddUrlGroup(new Uri("http://orders.application.web/health"), name: "orders.application.web", tags: new string[] { "orders.application.web" });
+                .AddUrlGroup(new Uri("http://customers.presentation.web/health"), name: "customers.presentation.web", tags: new string[] { "customers.presentation.web" })
+                .AddUrlGroup(new Uri("http://orders.presentation.web/health"), name: "orders.presentation.web", tags: new string[] { "orders.presentation.web" });
             // TODO: get hosts from ocelot file?
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
