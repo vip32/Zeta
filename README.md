@@ -9,9 +9,10 @@ A mildly opiniated modern cloud service architecture blueprint + reference imple
 ``` 
 
                                                                     - Services, Jobs, Validators
-                                                .----------------.  - Commands/Query + Handlers
-   - WebApi/Mvc/                            .-->| Application    |  - Messages/Queues + Handlers
-     SPA/Console program host              /    `----------------`  - Adapter Interfaces, Exceptions
+                                                                    - Commands/Query + Handlers
+                                                .----------------.  - Messages/Queues + Handlers
+   - WebApi/Mvc/                            .-->| Application    |  - Adapter Interfaces, Exceptions
+     SPA/Console program host              /    `----------------`  - View Models + Mappings
                                           /        |        ^
   .--------------.                       /         |        |
   .              |     .--------------. /          V        |  - Events, Aggregates, Services
@@ -24,7 +25,6 @@ A mildly opiniated modern cloud service architecture blueprint + reference imple
                        - Controllers       \    .----------------.  - Interface Implementierungen (Adapters/Repositories)  
                        - Razor Pages        `-->| Infrastructure |  - DbContext
                        - Hosted Services        `----------------`  - Data Entities + Mappings   
-                       - View Models + Mappings
 
 ```
 
