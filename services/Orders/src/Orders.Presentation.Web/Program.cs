@@ -57,7 +57,7 @@
                      .Enrich.FromLogContext()
                      .WriteTo.Trace()
                      .WriteTo.Console()
-                     .WriteTo.Seq(string.IsNullOrWhiteSpace(context.Configuration["Serilog:SeqServerUrl"]) ? "http://localhost:5340" /*"http://seq"*/ : context.Configuration["Serilog:SeqServerUrl"]);
+                     .WriteTo.Seq(string.IsNullOrWhiteSpace(context.Configuration["Serilog:SeqServerUrl"]) ? /*"http://localhost:5340"*/ "http://seq" : context.Configuration["Serilog:SeqServerUrl"]);
                })
                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
     }

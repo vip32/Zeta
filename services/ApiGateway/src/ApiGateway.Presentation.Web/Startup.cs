@@ -2,6 +2,7 @@
 {
     using System;
     using HealthChecks.UI.Client;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -33,24 +34,8 @@
                 .AddUrlGroup(new Uri("http://orders.presentation.web/health"), name: "orders.presentation.web", tags: new string[] { "orders.presentation.web" });
             // TODO: get hosts from ocelot file?
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.RequireHttpsMetadata = false;
-                    options.Authority = this.Configuration["Oidc:Authority"];
-                    options.MetadataAddress = $"{this.Configuration["Oidc:Authority"].Replace("localhost", "keycloak", StringComparison.OrdinalIgnoreCase)}/.well-known/openid-configuration";
-                    options.IncludeErrorDetails = true;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        NameClaimType = "name",
-                        RoleClaimType = "groups",
-                        ValidateAudience = false,
-                        //ValidAudiences = new[] { "master-realm", "account" },
-                        ValidateIssuer = true,
-                        ValidIssuer = this.Configuration["Oidc:Authority"],
-                        ValidateLifetime = false
-                    };
-                });
+            services.AddAuthentication(options => this.ConfigureAuthentication(options))
+                .AddJwtBearer(options => this.ConfigureJwtBearer(options));
             services.AddAuthorization();
 
             services.AddControllers();
@@ -103,6 +88,30 @@
             app.UseEndpoints(e => e.MapControllers());
 
             app.UseOcelot().Wait(); // useendpoints?
+        }
+
+        private void ConfigureAuthentication(AuthenticationOptions options)
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }
+
+        private void ConfigureJwtBearer(JwtBearerOptions options)
+        {
+            options.RequireHttpsMetadata = false;
+            options.Authority = this.Configuration["Oidc:Authority"];
+            options.MetadataAddress = $"{this.Configuration["Oidc:Authority"].Replace("localhost", "keycloak", StringComparison.OrdinalIgnoreCase)}/.well-known/openid-configuration";
+            options.IncludeErrorDetails = true;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                NameClaimType = "name",
+                RoleClaimType = "groups",
+                ValidateAudience = false,
+                //ValidAudiences = new[] { "master-realm", "account" },
+                ValidateIssuer = true,
+                ValidIssuer = this.Configuration["Oidc:Authority"],
+                ValidateLifetime = false
+            };
         }
     }
 }

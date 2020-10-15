@@ -2,6 +2,7 @@
 {
     using System;
     using HealthChecks.UI.Client;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -28,27 +29,8 @@
             services.AddControllers();
             services.AddHealthChecks().AddCheck("self", () => HealthCheckResult.Healthy(), tags: new[] { "live" });
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.Authority = this.Configuration["Oidc:Authority"];
-                options.MetadataAddress = $"{this.Configuration["Oidc:Authority"].Replace("localhost", "keycloak", StringComparison.OrdinalIgnoreCase)}/.well-known/openid-configuration";
-                options.IncludeErrorDetails = true;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    NameClaimType = "name",
-                    RoleClaimType = "groups",
-                    ValidateAudience = false,
-                    //ValidAudiences = new[] { "master-realm", "account" },
-                    ValidateIssuer = true,
-                    ValidIssuer = this.Configuration["Oidc:Authority"],
-                    ValidateLifetime = false
-                };
-            });
+            services.AddAuthentication(options => this.ConfigureAuthentication(options))
+                .AddJwtBearer(options => this.ConfigureJwtBearer(options));
             services.AddAuthorization();
 
             services.AddSwaggerDocument(document => document.Title = this.GetType().Namespace);
@@ -95,6 +77,30 @@
                 });
                 endpoints.MapControllers();
             });
+        }
+
+        private void ConfigureAuthentication(AuthenticationOptions options)
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }
+
+        private void ConfigureJwtBearer(JwtBearerOptions options)
+        {
+            options.RequireHttpsMetadata = false;
+            options.Authority = this.Configuration["Oidc:Authority"];
+            options.MetadataAddress = $"{this.Configuration["Oidc:Authority"].Replace("localhost", "keycloak", StringComparison.OrdinalIgnoreCase)}/.well-known/openid-configuration";
+            options.IncludeErrorDetails = true;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                NameClaimType = "name",
+                RoleClaimType = "groups",
+                ValidateAudience = false,
+                //ValidAudiences = new[] { "master-realm", "account" },
+                ValidateIssuer = true,
+                ValidIssuer = this.Configuration["Oidc:Authority"],
+                ValidateLifetime = false
+            };
         }
     }
 }
