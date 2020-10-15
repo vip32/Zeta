@@ -185,7 +185,7 @@ Rules help making Entity methods itself less complex.
 # Infrastructure
 ```
 
-                                             http:5002  http:5006
+                                             http:6001  http:6002
                +==============+-------------------|-------------|--------------.
                | DOCKER HOST  |                   |             |              |
                +==============+                   V             |              |
