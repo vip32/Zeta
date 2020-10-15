@@ -14,8 +14,6 @@
     using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Logging;
     using Microsoft.IdentityModel.Tokens;
-    using Ocelot.DependencyInjection;
-    using Ocelot.Middleware;
 
     public class Startup
     {
@@ -32,7 +30,7 @@
                 .AddCheck("self", () => HealthCheckResult.Healthy(), tags: new[] { "live" })
                 .AddUrlGroup(new Uri("http://customers.presentation.web/health"), name: "customers.presentation.web", tags: new string[] { "customers.presentation.web" })
                 .AddUrlGroup(new Uri("http://orders.presentation.web/health"), name: "orders.presentation.web", tags: new string[] { "orders.presentation.web" });
-            // TODO: get hosts from ocelot file?
+            // TODO: get hosts from ReverseProxy config section?
 
             services.AddAuthentication(options => this.ConfigureAuthentication(options))
                 .AddJwtBearer(options => this.ConfigureJwtBearer(options));
@@ -40,7 +38,8 @@
 
             services.AddControllers();
 
-            services.AddOcelot(this.Configuration);
+            services.AddReverseProxy()
+                .LoadFromConfig(this.Configuration.GetSection("ReverseProxy"));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -85,9 +84,11 @@
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(e => e.MapControllers());
-
-            app.UseOcelot().Wait(); // useendpoints?
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapReverseProxy();
+            });
         }
 
         private void ConfigureAuthentication(AuthenticationOptions options)

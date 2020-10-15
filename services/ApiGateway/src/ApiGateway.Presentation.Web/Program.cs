@@ -25,7 +25,6 @@
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                     .AddJsonFile($"appsettings.{context?.HostingEnvironment?.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile("ocelot.json")
                     .AddEnvironmentVariables();
 
                    var config = builder.Build();

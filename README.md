@@ -196,7 +196,7 @@ Rules help making Entity methods itself less complex.
  | I -|   6100 |    433 | Api      | |                          |              |
  | E -|---------------->| Gateway  |-`                          |              |
  | N -|   http |     80 |==========|                            V              |
- | T -|   6000 |        | (ocelot) |-.                .------------.           |
+ | T -|   6000 |        | (YARP)   |-.                .------------.           |
  | S -|        |        `----------`  `-------------->| Orders     |           |
  |    |        |                              http:80 |  Service   |           |
  `----`        |                                      `------------`           |
