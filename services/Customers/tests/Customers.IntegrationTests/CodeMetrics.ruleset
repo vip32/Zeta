@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Rules" Description="Rules" ToolsVersion="16.0">
+  <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1501" Action="Warning" />
+    <Rule Id="CA1502" Action="Warning" />
+    <Rule Id="CA1504" Action="Warning" />
+    <Rule Id="CA1505" Action="Warning" />
+    <Rule Id="CA1506" Action="Warning" />
+  </Rules>
+  <Rules AnalyzerId="Microsoft.CodeQuality.Analyzers" RuleNamespace="Microsoft.CodeQuality.Analyzers">
+    <Rule Id="CA1501" Action="Warning" />
+    <Rule Id="CA1502" Action="Warning" />
+    <Rule Id="CA1505" Action="Warning" />
+    <Rule Id="CA1506" Action="Warning" />
+    <Rule Id="CA1509" Action="Warning" />
+  </Rules>
+</RuleSet>

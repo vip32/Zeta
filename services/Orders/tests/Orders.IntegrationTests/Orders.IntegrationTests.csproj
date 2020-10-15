@@ -1,15 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>Zeta.Customers.UnitTests</AssemblyName>
-    <RootNamespace>Zeta.Customers.UnitTests</RootNamespace>
+    <AssemblyName>Zeta.Orders.IntegrationTests</AssemblyName>
+    <RootNamespace>Zeta.Orders.IntegrationTests</RootNamespace>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
-    <PackageReference Include="NetArchTest.Rules" Version="1.2.6" />
     <PackageReference Include="Shouldly" Version="3.0.2" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
@@ -23,10 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Customers.Application\Customers.Application.csproj" />
-    <ProjectReference Include="..\..\src\Customers.Domain\Customers.Domain.csproj" />
-    <ProjectReference Include="..\..\src\Customers.Infrastructure\Customers.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\src\Customers.Presentation.Web\Customers.Presentation.Web.csproj" />
+    <ProjectReference Include="..\..\src\Orders.Application\Orders.Application.csproj" />
+    <ProjectReference Include="..\..\src\Orders.Domain\Orders.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Orders.Infrastructure\Orders.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Orders.Presentation.Web\Orders.Presentation.Web.csproj" />
   </ItemGroup>
 
 </Project>
