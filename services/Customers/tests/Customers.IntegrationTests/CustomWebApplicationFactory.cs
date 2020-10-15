@@ -12,7 +12,6 @@
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
-    using Zeta.Customers.Presentation.Web;
 
     public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup>
         where TStartup : class
@@ -23,7 +22,7 @@
             return Host.CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<TStartup>();
                     webBuilder.ConfigureTestServices(services => services
                         .AddAuthentication(options => // add a fake authentication handler
                         {
