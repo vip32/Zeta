@@ -14,8 +14,9 @@
     using Microsoft.Extensions.Options;
     using Zeta.Customers.Presentation.Web;
 
-    public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<Startup>
-    // https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-3.1#basic-tests-with-the-default-webapplicationfactory
+    public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup>
+        where TStartup : class
+        // https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-3.1#basic-tests-with-the-default-webapplicationfactory
     {
         protected override IHostBuilder CreateHostBuilder()
         {
