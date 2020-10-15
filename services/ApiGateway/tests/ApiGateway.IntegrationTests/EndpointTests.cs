@@ -50,5 +50,17 @@
 
             Assert.NotNull(result);
         }
+
+        //[Fact]
+        //public async Task CustomersEchoGetTest()
+        //{
+        //    var response = await this.client.GetAsync("https://localhost/customers/api/echo").ConfigureAwait(false);
+
+        //    response.EnsureSuccessStatusCode();
+        //    var stringResponse = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        //    var result = JsonConvert.DeserializeObject<object>(stringResponse);
+
+        //    Assert.NotNull(result);
+        //}
     }
 }
