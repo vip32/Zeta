@@ -49,7 +49,6 @@
                     ValidateLifetime = false
                 };
             });
-
             services.AddAuthorization();
 
             services.AddSwaggerDocument(document => document.Title = this.GetType().Namespace);

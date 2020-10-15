@@ -18,18 +18,6 @@
 
     public class Startup
     {
-        public Startup(IWebHostEnvironment env)
-        {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddJsonFile("ocelot.json")
-                .AddEnvironmentVariables();
-
-            this.Configuration = builder.Build();
-        }
-
         public Startup(IConfiguration configuration)
         {
             this.Configuration = configuration;
@@ -63,9 +51,9 @@
                         ValidateLifetime = false
                     };
                 });
+            services.AddAuthorization();
 
             services.AddControllers();
-            services.AddAuthorization();
 
             services.AddOcelot(this.Configuration);
         }
