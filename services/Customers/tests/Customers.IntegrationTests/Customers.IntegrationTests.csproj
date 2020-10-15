@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\foundation\src\Foundation.Utilities.Testing\Foundation.Utilities.Testing.csproj" />
     <ProjectReference Include="..\..\src\Customers.Application\Customers.Application.csproj" />
     <ProjectReference Include="..\..\src\Customers.Domain\Customers.Domain.csproj" />
     <ProjectReference Include="..\..\src\Customers.Infrastructure\Customers.Infrastructure.csproj" />

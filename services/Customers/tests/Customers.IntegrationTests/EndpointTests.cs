@@ -6,6 +6,7 @@
     using Newtonsoft.Json;
     using Xunit;
     using Zeta.Customers.Presentation.Web;
+    using Zeta.Foundation;
 
     public class EndpointTests : IClassFixture<CustomWebApplicationFactory<Startup>>
     {

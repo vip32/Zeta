@@ -1,4 +1,4 @@
-﻿namespace Zeta.Customers.IntegrationTests
+﻿namespace Zeta.Foundation
 {
     using System.Collections.Generic;
     using System.Security.Claims;

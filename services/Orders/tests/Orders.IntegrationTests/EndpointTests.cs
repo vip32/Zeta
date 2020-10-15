@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using Newtonsoft.Json;
     using Xunit;
+    using Zeta.Foundation;
     using Zeta.Orders.Presentation.Web;
 
     public class EndpointTests : IClassFixture<CustomWebApplicationFactory<Startup>>
