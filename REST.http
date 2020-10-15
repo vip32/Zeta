@@ -66,11 +66,11 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 ###################################################################################
-### API get Customers Service health                                              #
+### API get Customers Service health (Gateway)                                             #
 GET https://localhost:6100/customers/health HTTP/1.1
 Content-Type: application/json
 
-### API get Customers Service echo                                                #
+### API get Customers Service echo (Gateway)                                              #
 GET https://localhost:6100/customers/api/echo HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
@@ -81,11 +81,11 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 ###################################################################################
-### API get Orders Service health                                                 #
+### API get Orders Service healt (Gateway)h                                                 #
 GET https://localhost:6100/orders/health HTTP/1.1
 Content-Type: application/json
 
-### API get Orders Service echo                                                   #
+### API get Orders Service echo (Gateway)                                                 #
 GET https://localhost:6100/orders/api/echo HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
