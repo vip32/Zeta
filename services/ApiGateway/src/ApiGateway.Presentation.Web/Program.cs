@@ -7,6 +7,7 @@
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Serilog;
+    using Zeta.Foundation;
 
     public static class Program
     {
@@ -55,6 +56,7 @@
                      .MinimumLevel.Verbose()
                      .Enrich.WithProperty("ServiceName", AppName)
                      .Enrich.FromLogContext()
+                     .Enrich.WithCorrelationId()
                      .WriteTo.Trace()
                      .WriteTo.Console()
                      .WriteTo.Seq(string.IsNullOrWhiteSpace(context.Configuration["Serilog:SeqServerUrl"]) ? /*"http://localhost:5340"*/ "http://seq" : context.Configuration["Serilog:SeqServerUrl"]);

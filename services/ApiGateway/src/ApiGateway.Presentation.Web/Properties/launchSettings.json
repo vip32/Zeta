@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/echo",
+      "launchUrl": "api/v1/echo",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "Naos.Sample.ApiGateway.Presentation.Web": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/echo",
+      "launchUrl": "api/v1/echo",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

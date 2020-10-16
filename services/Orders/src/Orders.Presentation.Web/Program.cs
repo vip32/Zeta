@@ -7,6 +7,7 @@
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Serilog;
+    using Zeta.Foundation;
 
     public static class Program
     {
@@ -54,6 +55,7 @@
                    builder.ReadFrom.Configuration(context.Configuration)
                      .MinimumLevel.Verbose()
                      .Enrich.WithProperty("ServiceName", AppName)
+                     .Enrich.WithCorrelationId()
                      .Enrich.FromLogContext()
                      .WriteTo.Trace()
                      .WriteTo.Console()

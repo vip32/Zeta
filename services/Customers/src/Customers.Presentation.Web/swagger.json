@@ -6,166 +6,173 @@
 
 {
   "x-generator": "NSwag v13.8.2.0 (NJsonSchema v10.2.1.0 (Newtonsoft.Json v10.0.0.0))",
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
     "title": "Zeta.Customers.Presentation.Web",
-    "version": "1.0.0"
+    "description": "Zeta.Customers.Presentation.Web API",
+    "version": "v1"
   },
-  "host": "localhost",
-  "schemes": [
-    "http"
+  "servers": [
+    {
+      "url": "http://localhost"
+    }
   ],
   "paths": {
-    "/api/echo": {
-      "get": {
-        "tags": [
-          "Echo"
-        ],
-        "summary": "Echo",
-        "operationId": "Echo_Get",
-        "produces": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          },
-          "400": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/ValidationProblemDetails"
-            }
-          },
-          "500": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/ProblemDetails"
-            }
-          }
-        }
-      }
-    },
-    "/api/Values": {
+    "/api/v1/values": {
       "get": {
         "tags": [
           "Values"
         ],
         "operationId": "Values_GetAll",
-        "produces": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
         "responses": {
           "200": {
-            "x-nullable": false,
             "description": "",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       },
       "post": {
         "tags": [
           "Values"
         ],
         "operationId": "Values_Post",
-        "consumes": [
-          "application/json",
-          "text/json",
-          "application/*+json"
-        ],
-        "parameters": [
-          {
-            "name": "value",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "x-nullable": false
-          }
-        ],
+        "requestBody": {
+          "x-name": "value",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
-    "/api/Values/{id}": {
+    "/api/v1/values/{id}": {
       "get": {
         "tags": [
           "Values"
         ],
         "operationId": "Values_Get",
-        "produces": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
         "parameters": [
           {
-            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
           }
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
             "description": "",
-            "schema": {
-              "type": "string"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       },
       "put": {
         "tags": [
           "Values"
         ],
         "operationId": "Values_Put",
-        "consumes": [
-          "application/json",
-          "text/json",
-          "application/*+json"
-        ],
         "parameters": [
           {
-            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
-          },
-          {
-            "name": "value",
-            "in": "body",
-            "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             },
-            "x-nullable": false
+            "x-position": 1
           }
         ],
+        "requestBody": {
+          "x-name": "value",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
         "responses": {
           "200": {
             "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -174,68 +181,166 @@
         "operationId": "Values_Delete",
         "parameters": [
           {
-            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
           }
         ],
         "responses": {
           "200": {
             "description": ""
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
-        }
-      }
-    }
-  },
-  "definitions": {
-    "ValidationProblemDetails": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/ProblemDetails"
         },
-        {
-          "type": "object",
-          "properties": {
-            "errors": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "array",
-                "items": {
-                  "type": "string"
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/_echo": {
+      "get": {
+        "tags": [
+          "Echo"
+        ],
+        "summary": "Echo",
+        "operationId": "Echo_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
           }
         }
-      ]
+      }
     },
-    "ProblemDetails": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "title": {
-          "type": "string"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "detail": {
-          "type": "string"
-        },
-        "instance": {
-          "type": "string"
-        },
-        "extensions": {
-          "type": "object",
-          "additionalProperties": {}
+    "/api/v1/_systeminformation": {
+      "get": {
+        "tags": [
+          "SystemInformation"
+        ],
+        "operationId": "SystemInformation_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemInformation"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
         }
       }
     }
-  }
+  },
+  "components": {
+    "schemas": {
+      "ProblemDetails": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "extensions": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {}
+          }
+        }
+      },
+      "SystemInformation": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "request": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {}
+          },
+          "runtime": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {}
+          },
+          "identity": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {}
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "oauth2",
+        "description": "Oidc Authentication",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "http://localhost:8080/auth/realms/master/protocol/openid-connect/auth",
+            "tokenUrl": "http://localhost:8080/auth/realms/master/protocol/openid-connect/token"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
 }

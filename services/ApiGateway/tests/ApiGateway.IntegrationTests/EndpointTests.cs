@@ -42,7 +42,7 @@
         [Fact]
         public async Task EchoGetTest()
         {
-            var response = await this.client.GetAsync("api/echo").ConfigureAwait(false);
+            var response = await this.client.GetAsync("api/v1/_echo").ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync().ConfigureAwait(false);

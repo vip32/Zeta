@@ -61,7 +61,7 @@ GET https://localhost:6100/health HTTP/1.1
 Content-Type: application/json
 
 ### API get Api Gateway echo                                                      #
-GET https://localhost:6100/api/echo HTTP/1.1
+GET https://localhost:6100/api/v1/_echo HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
@@ -71,12 +71,12 @@ GET https://localhost:6100/customers/health HTTP/1.1
 Content-Type: application/json
 
 ### API get Customers Service echo (Gateway)                                              #
-GET https://localhost:6100/customers/api/echo HTTP/1.1
+GET https://localhost:6100/customers/api/v1/_echo HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 ### API get Customers Service echo (Direct)                                       #
-GET http://localhost:6001/api/echo HTTP/1.1
+GET http://localhost:6001/api/v1/_echo HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
@@ -86,11 +86,11 @@ GET https://localhost:6100/orders/health HTTP/1.1
 Content-Type: application/json
 
 ### API get Orders Service echo (Gateway)                                                 #
-GET https://localhost:6100/orders/api/echo HTTP/1.1
+GET https://localhost:6100/orders/api/v1/_echo HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 ### API get Orders Service echo (Direct)                                          #
-GET http://localhost:6002/api/echo HTTP/1.1
+GET http://localhost:6002/api/v1/_echo HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json

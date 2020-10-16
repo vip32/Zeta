@@ -1,10 +1,13 @@
 ﻿namespace Zeta.Orders.Presentation.Web.Controllers
 {
     using System.Collections.Generic;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-    [Route("api/[controller]")]
+    [Authorize/*(Roles = "admin")*/] // maps to jwt groups
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("/api/v{version:apiVersion}/values")]
     public class ValuesController : ControllerBase
     {
         // GET api/values

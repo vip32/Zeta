@@ -102,7 +102,9 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "zeta",
       "redirectUris": [
-        "https://localhost:6100/signin-oidc"
+        "https://localhost:6100/*",
+        "http://localhost:6001/*",
+        "http://localhost:6002/*"
       ],
       "webOrigins": [
         "*"

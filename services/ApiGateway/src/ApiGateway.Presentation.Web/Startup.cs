@@ -1,21 +1,32 @@
 ﻿namespace Zeta.ApiGateway.Presentation.Web
 {
     using System;
-    using HealthChecks.UI.Client;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net.Http;
+    using Hellang.Middleware.ProblemDetails;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Diagnostics.HealthChecks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Versioning;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Diagnostics.HealthChecks;
     using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Logging;
     using Microsoft.IdentityModel.Tokens;
+    using Microsoft.ReverseProxy.Configuration.Contract;
+    using NSwag;
+    using NSwag.AspNetCore;
+    using NSwag.Generation.AspNetCore;
+    using NSwag.Generation.Processors;
+    using NSwag.Generation.Processors.Security;
+    using Zeta.Foundation;
 
-    public class Startup
+    public class Startup // WARN: CA1506: > 99
     {
         public Startup(IConfiguration configuration)
         {
@@ -26,20 +37,41 @@
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
             services.AddHealthChecks()
-                .AddCheck("self", () => HealthCheckResult.Healthy(), tags: new[] { "live" })
-                .AddUrlGroup(new Uri("http://customers.presentation.web/health"), name: "customers.presentation.web", tags: new string[] { "customers.presentation.web" })
-                .AddUrlGroup(new Uri("http://orders.presentation.web/health"), name: "orders.presentation.web", tags: new string[] { "orders.presentation.web" });
-            // TODO: get hosts from ReverseProxy config section?
+                .AddCheck("self", () => HealthCheckResult.Healthy(), tags: new[] { "live" });
 
             services.AddAuthentication(options => this.ConfigureAuthentication(options))
                 .AddJwtBearer(options => this.ConfigureJwtBearer(options));
             services.AddAuthorization();
 
+            services.AddApiVersioning(options => this.ConfigureApiVersioning(options));
+            services.AddVersionedApiExplorer(options => options.SubstituteApiVersionInUrl = true);
+
+            services.AddProblemDetails(this.ConfigureProblemDetails);
+
+            services.AddOpenApiDocument(document => this.ConfigureOpenApiDocument(this.Configuration, document));
+
             services.AddControllers();
 
-            services.AddReverseProxy()
+            services.AddReverseProxy() // TODO: move to extension method
                 .LoadFromConfig(this.Configuration.GetSection("ReverseProxy"));
+            foreach (var cluster in
+                this.Configuration.GetSection("ReverseProxy")
+                                  .Get<ConfigurationData>()?.Clusters.Safe())
+            {
+                foreach (var destination in cluster.Value?.Destinations.Safe())
+                {
+                    if (!string.IsNullOrEmpty(destination.Value?.Address))
+                    {
+                        services.AddHealthChecks()
+                            .AddUrlGroup(
+                                new Uri(destination.Value?.Address),
+                                name: destination.Key,
+                                tags: new string[] { destination.Key });
+                    }
+                }
+            }
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -54,38 +86,41 @@
                 app.UseHsts();
             }
 
-            app.MapWhen(c => c.Request.Path == "/", a =>
-            {
-                a.Run(async x =>
-                    await x.Response.WriteAsync($"<html><body><h1>{this.GetType().Namespace} ({Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")})</h1><p><a href='/health'>health</a>&nbsp;<a href='/health/live'>liveness</a>&nbsp;<a href='/api/echo'>echo</a>&nbsp;<a href='http://localhost:5340' target='_blank'>logs</a></p></body></html>").ConfigureAwait(false));
-            });
-
-            app.UseHealthChecks("/health", new HealthCheckOptions()
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-            app.UseHealthChecks("/health/ready", new HealthCheckOptions
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-            app.UseHealthChecks("/health/live", new HealthCheckOptions
-            {
-                Predicate = r => r.Tags.Contains("live"),
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-
-            // TODO: auth https://github.com/catcherwong-archive/APIGatewayDemo/tree/master/APIGatewayJWTAuthenticationDemo
-
             app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseOpenApi();
+            app.UseSwaggerUi3(settings => this.ConfigureSwaggerUI(settings));
+            app.UseCorrelationId();
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGet("/", async context =>
+                {
+                    await context.Response.WriteAsync(@$"
+<html>
+<body>
+    <h1>{this.GetType().Namespace.Replace("Zeta", "&zeta;eta", StringComparison.OrdinalIgnoreCase)} ({Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")})</h1>
+    <p>
+        <a href='/api/v1/_systeminformation'>info</a>&nbsp;
+        <a href='/health'>health</a>&nbsp;
+        <a href='/health/live'>liveness</a>&nbsp;
+        <a href='/api/v1/_echo'>echo</a>&nbsp;
+        <a href='/swagger/index.html' target='_blank'>swagger</a>&nbsp;
+        <a href='http://localhost:5340' target='_blank'>logs</a>
+    </p>
+
+    <ul>
+        <li><a href='http://localhost:6001' target='_blank'>customers</a></li>
+        <li><a href='http://localhost:6002' target='_blank'>orders</a></li>
+    </ul>
+</body>
+</html>").ConfigureAwait(false);
+                });
+                endpoints.MapHealthChecks();
                 endpoints.MapControllers();
                 endpoints.MapReverseProxy();
             });
@@ -113,6 +148,68 @@
                 ValidIssuer = this.Configuration["Oidc:Authority"],
                 ValidateLifetime = false
             };
+        }
+
+        private void ConfigureApiVersioning(ApiVersioningOptions options)
+        {
+            options.DefaultApiVersion = new ApiVersion(1, 0);
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.ReportApiVersions = true;
+        }
+
+        private void ConfigureOpenApiDocument(IConfiguration configuration, AspNetCoreOpenApiDocumentGeneratorSettings settings)
+        {
+            settings.DocumentName = "v1";
+            settings.Version = "v1";
+            settings.Title = this.GetType().Namespace;
+            settings.AddSecurity(
+                "bearer",
+                Enumerable.Empty<string>(),
+                new OpenApiSecurityScheme
+                {
+                    Type = OpenApiSecuritySchemeType.OAuth2,
+                    Flow = OpenApiOAuth2Flow.Implicit,
+                    Description = "Oidc Authentication",
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        Implicit = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = $"{configuration["Oidc:Authority"]}/protocol/openid-connect/auth",
+                            TokenUrl = $"{configuration["Oidc:Authority"]}/protocol/openid-connect/token",
+                            Scopes = new Dictionary<string, string>
+                            {
+                               //{"openid", "openid"},
+                            }
+                        }
+                    },
+                });
+            settings.OperationProcessors.Add(new ApiVersionProcessor());
+            settings.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("bearer"));
+            settings.OperationProcessors.Add(new AuthorizationOperationProcessor("bearer"));
+            settings.PostProcess = document =>
+            {
+                document.Info.Version = "v1";
+                document.Info.Title = this.GetType().Namespace;
+                document.Info.Description = $"{this.GetType().Namespace} API";
+            };
+        }
+
+        private void ConfigureProblemDetails(ProblemDetailsOptions options)
+        {
+            options.IncludeExceptionDetails = (ctx, ex) => true;
+            options.MapToStatusCode<NotImplementedException>(StatusCodes.Status501NotImplemented);
+            options.MapToStatusCode<HttpRequestException>(StatusCodes.Status503ServiceUnavailable);
+            options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
+        }
+
+        private void ConfigureSwaggerUI(SwaggerUi3Settings settings)
+        {
+            settings.OAuth2Client = new OAuth2ClientSettings
+            {
+                ClientId = this.Configuration["Oidc:ClientId"],
+                AppName = this.GetType().Namespace,
+            };
+            settings.SwaggerRoutes.Add(new SwaggerUi3Route(this.GetType().Namespace, "swagger/v1/swagger.json"));
         }
     }
 }
