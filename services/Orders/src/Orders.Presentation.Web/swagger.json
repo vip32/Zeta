@@ -5,7 +5,7 @@
 //----------------------
 
 {
-  "x-generator": "NSwag v13.8.2.0 (NJsonSchema v10.2.1.0 (Newtonsoft.Json v10.0.0.0))",
+  "x-generator": "NSwag v13.8.2.0 (NJsonSchema v10.2.1.0 (Newtonsoft.Json v9.0.0.0))",
   "openapi": "3.0.0",
   "info": {
     "title": "Zeta.Orders.Presentation.Web",
@@ -18,51 +18,6 @@
     }
   ],
   "paths": {
-    "/api/v1/_echo": {
-      "get": {
-        "tags": [
-          "Echo"
-        ],
-        "summary": "Echo",
-        "operationId": "Echo_Get",
-        "responses": {
-          "200": {
-            "description": ""
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ValidationProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
     "/api/v1/values": {
       "get": {
         "tags": [
@@ -254,6 +209,35 @@
         ]
       }
     },
+    "/api/v1/_echo": {
+      "get": {
+        "tags": [
+          "Echo"
+        ],
+        "summary": "Echo",
+        "operationId": "Echo_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/_systeminformation": {
       "get": {
         "tags": [
@@ -270,6 +254,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
           }
         }
       }
@@ -277,29 +271,6 @@
   },
   "components": {
     "schemas": {
-      "ValidationProblemDetails": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/ProblemDetails"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "errors": {
-                "type": "object",
-                "nullable": true,
-                "additionalProperties": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        ]
-      },
       "ProblemDetails": {
         "type": "object",
         "additionalProperties": false,
