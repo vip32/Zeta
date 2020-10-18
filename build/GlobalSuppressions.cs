@@ -11,3 +11,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Redundancy", "RCS1213:Remove unused member declaration.", Justification = "<Pending>")]
 [assembly: SuppressMessage("Style", "IDE0009:Member access should be qualified.", Justification = "<Pending>")]
 [assembly: SuppressMessage("Simplification", "RCS1214:Unnecessary interpolated string.", Justification = "<Pending>")]
+[assembly: SuppressMessage("Design", "RCS1110:Declare type inside namespace.", Justification = "<Pending>")]
