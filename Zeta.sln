@@ -113,6 +113,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{EFBBE0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Presentation.Web", "foundation\src\Foundation.Presentation.Web\Foundation.Presentation.Web.csproj", "{5D3BAEE0-1F59-4927-96A2-CDB6938BC638}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{AA3CABD0-5CEF-405C-A657-CCF41B5D1646}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -195,6 +197,9 @@ Global
 		{5D3BAEE0-1F59-4927-96A2-CDB6938BC638}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D3BAEE0-1F59-4927-96A2-CDB6938BC638}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D3BAEE0-1F59-4927-96A2-CDB6938BC638}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA3CABD0-5CEF-405C-A657-CCF41B5D1646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA3CABD0-5CEF-405C-A657-CCF41B5D1646}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA3CABD0-5CEF-405C-A657-CCF41B5D1646}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -236,6 +241,7 @@ Global
 		{6A118693-D63A-4A96-9430-16A8BA90DAC8} = {020594E5-5CEC-4E0E-89B9-230555C36B89}
 		{EFBBE033-F4EE-4231-A467-4421BE387401} = {6A118693-D63A-4A96-9430-16A8BA90DAC8}
 		{5D3BAEE0-1F59-4927-96A2-CDB6938BC638} = {190546F9-680E-4E26-99B1-3765917C9885}
+		{AA3CABD0-5CEF-405C-A657-CCF41B5D1646} = {25F5DD8D-5EDC-4722-A875-167AD80312DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {58E8179D-3ED6-4AF7-B144-1367FB9D7713}
