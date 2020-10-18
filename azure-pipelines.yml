@@ -39,7 +39,6 @@ stages:
 
     - task: DockerCompose@0 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/docker-compose?view=azure-devops
       displayName: Docker push images
-      enabled: true
       condition: |
         and
         (

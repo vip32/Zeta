@@ -113,7 +113,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{EFBBE0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Presentation.Web", "foundation\src\Foundation.Presentation.Web\Foundation.Presentation.Web.csproj", "{5D3BAEE0-1F59-4927-96A2-CDB6938BC638}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{AA3CABD0-5CEF-405C-A657-CCF41B5D1646}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "build", "build\build.csproj", "{AA3CABD0-5CEF-405C-A657-CCF41B5D1646}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
