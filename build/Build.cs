@@ -32,14 +32,18 @@ class Build : NukeBuild
     [GitRepository] readonly GitRepository GitRepository;
     [GitVersion] readonly GitVersion GitVersion;
 
-    AbsolutePath SourceDirectory => RootDirectory / "src";
+    AbsolutePath SourceDirectory => RootDirectory / "src"; // TODO
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
 
     Target Clean => _ => _
         .Before(Restore)
         .Executes(() =>
         {
-            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
+            (RootDirectory / "foundation").GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
+            (RootDirectory / "foundation").GlobDirectories("**/TestResults").ForEach(DeleteDirectory);
+            (RootDirectory / "services").GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
+            (RootDirectory / "services").GlobDirectories("**/TestResults").ForEach(DeleteDirectory);
+            (RootDirectory / "services").GlobDirectories("**/logs").ForEach(DeleteDirectory);
             EnsureCleanDirectory(ArtifactsDirectory);
         });
 
