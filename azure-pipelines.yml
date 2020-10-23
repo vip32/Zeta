@@ -33,13 +33,14 @@ stages:
     - task: CmdLine@2
       displayName: Nuke build/test/pack/push
       inputs:
-        script: '$(System.DefaultWorkingDirectory)/build.cmd Push --nuget-api-key $(NuGetSourceServerApiKey)'
+        script: '$(System.DefaultWorkingDirectory)/build.sh Push --nuget-api-key $(NuGetSourceServerApiKey)'
 
     - task: DockerCompose@0 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/docker-compose?view=azure-devops
       displayName: Docker build images
       condition: |
           and
           (
+             succeeded(),
              eq(variables['dockerImagesPush'], 'true'),
              or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
           )
