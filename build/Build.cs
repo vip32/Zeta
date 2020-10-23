@@ -96,6 +96,7 @@ class Build : NukeBuild
       .DependsOn(Compile)
       .Executes(() =>
       {
+          EnsureCleanDirectory(ArtifactsDirectory);
           var projects = Solution.AllProjects.Where(p =>
              p.Name.StartsWith("Foundation"));
           DotNetPack(s => s
