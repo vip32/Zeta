@@ -27,6 +27,12 @@ stages:
 
     - task: DockerCompose@0 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/docker-compose?view=azure-devops
       displayName: Docker build images
+      condition: |
+          and
+          (
+             eq(variables['dockerImagesPush'], 'true'),
+             or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+          )
       inputs:
         action: 'Build services'
         containerregistrytype: 'Azure Container Registry'
@@ -42,8 +48,9 @@ stages:
       condition: |
         and
         (
+           succeeded(),
            eq(variables['dockerImagesPush'], 'true'),
-           eq(variables['Build.SourceBranch'], 'refs/heads/master')
+           or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
         )
       inputs:
         action: 'Push services'
