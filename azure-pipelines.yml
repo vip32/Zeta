@@ -30,10 +30,9 @@ stages:
     - task: GitVersion@5 # alternative https://github.com/adamralph/minver
       displayName: Apply git version
 
-    - task: CmdLine@2
+    - script: './build.sh Push --nuget-api-key $(NuGetSourceServerApiKey)'
       displayName: Nuke build/test/pack/push
-      inputs:
-        script: '$(System.DefaultWorkingDirectory)/build.sh Push --nuget-api-key $(NuGetSourceServerApiKey)'
+      workingDirectory: $(System.DefaultWorkingDirectory)
 
     - task: DockerCompose@0 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/docker-compose?view=azure-devops
       displayName: Docker build images
