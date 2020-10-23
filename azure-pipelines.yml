@@ -42,7 +42,6 @@ stages:
       condition: |
         and
         (
-           succeeded(),
            eq(variables['dockerImagesPush'], 'true'),
            eq(variables['Build.SourceBranch'], 'refs/heads/master')
         )
