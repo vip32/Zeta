@@ -33,17 +33,22 @@ class Build : NukeBuild
     [GitVersion] readonly GitVersion GitVersion;
 
     AbsolutePath SourceDirectory => RootDirectory / "src"; // TODO
+
+    AbsolutePath FoundationSourceDirectory => RootDirectory / "foundation";
+
+    AbsolutePath ServicesSourceDirectory => RootDirectory / "services";
+
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
 
     Target Clean => _ => _
         .Before(Restore)
         .Executes(() =>
         {
-            (RootDirectory / "foundation").GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-            (RootDirectory / "foundation").GlobDirectories("**/TestResults").ForEach(DeleteDirectory);
-            (RootDirectory / "services").GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-            (RootDirectory / "services").GlobDirectories("**/TestResults").ForEach(DeleteDirectory);
-            (RootDirectory / "services").GlobDirectories("**/logs").ForEach(DeleteDirectory);
+            FoundationSourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
+            FoundationSourceDirectory.GlobDirectories("**/TestResults").ForEach(DeleteDirectory);
+            ServicesSourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
+            ServicesSourceDirectory.GlobDirectories("**/TestResults").ForEach(DeleteDirectory);
+            ServicesSourceDirectory.GlobDirectories("**/logs").ForEach(DeleteDirectory);
             EnsureCleanDirectory(ArtifactsDirectory);
         });
 
@@ -84,6 +89,26 @@ class Build : NukeBuild
                     .SetLogger("trx")));
         });
 
+    Target Publish => _ => _
+        .After(Test)
+        .Executes(() =>
+        {
+            var projectSolution = Solution.AllProjects.Where(p =>
+                !p.Name.Contains("Tests")
+                && !p.Name.Contains("build")
+                && p.Is(ProjectType.CSharpProject));
+
+            DotNetPublish(s => s
+                .SetConfiguration(Configuration)
+                .SetAssemblyVersion(GitVersion.AssemblySemVer)
+                .SetFileVersion(GitVersion.AssemblySemFileVer)
+                .SetInformationalVersion(GitVersion.InformationalVersion)
+                .EnableNoRestore()
+                .CombineWith(projectSolution, (x, p) => x
+                    .SetProject(p)
+                    .SetOutput(ArtifactsDirectory / p.Name)));
+        });
+
     Target GenerateClient => _ => _
         .DependsOn(Compile)
         .Executes(() =>
@@ -113,39 +138,19 @@ class Build : NukeBuild
                 .SetExceptionClass("{controller}ClientException")
             );
 
-             var version = GitRepository.Branch.Equals("main", StringComparison.OrdinalIgnoreCase) ? GitVersion.MajorMinorPatch : GitVersion.NuGetVersionV2;
+            var version = GitRepository.Branch.Equals("main", StringComparison.OrdinalIgnoreCase) ? GitVersion.MajorMinorPatch : GitVersion.NuGetVersionV2;
 
-             DotNet($"new classlib -o {clientProjDir}", workingDirectory: clientProjDir);
-             DeleteFile(clientProjDir / "Class1.cs");
-             DotNet($"add package Newtonsoft.Json", workingDirectory: clientProjDir);
-             DotNet("add package System.ComponentModel.Annotations", workingDirectory: clientProjDir);
+            DotNet($"new classlib -o {clientProjDir}", workingDirectory: clientProjDir);
+            DeleteFile(clientProjDir / "Class1.cs");
+            DotNet($"add package Newtonsoft.Json", workingDirectory: clientProjDir);
+            DotNet("add package System.ComponentModel.Annotations", workingDirectory: clientProjDir);
 
-               DotNetPack(x => x
-                   .SetProject(clientProjDir)
-                   .SetOutputDirectory(ArtifactsDirectory)
-                   .SetConfiguration(Configuration)
-                   .SetVersion(version)
-                   .SetIncludeSymbols(true)
-              );
-        });
-
-    Target Publish => _ => _
-        .After(Test)
-        .Executes(() =>
-        {
-            var projectSolution = Solution.AllProjects.Where(p =>
-                !p.Name.Contains("Tests")
-                && !p.Name.Contains("build")
-                && p.Is(ProjectType.CSharpProject));
-
-            DotNetPublish(s => s
+            DotNetPack(x => x
+                .SetProject(clientProjDir)
+                .SetOutputDirectory(ArtifactsDirectory)
                 .SetConfiguration(Configuration)
-                .SetAssemblyVersion(GitVersion.AssemblySemVer)
-                .SetFileVersion(GitVersion.AssemblySemFileVer)
-                .SetInformationalVersion(GitVersion.InformationalVersion)
-                .EnableNoRestore()
-                .CombineWith(projectSolution, (x, p) => x
-                    .SetProject(p)
-                    .SetOutput(ArtifactsDirectory / p.Name)));
+                .SetVersion(version)
+                .SetIncludeSymbols(true)
+           );
         });
 }
