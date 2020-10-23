@@ -23,7 +23,11 @@ using static Nuke.Common.Tools.Xunit.XunitTasks;
 
 [CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
-//[AzurePipelines(AzurePipelinesImage.UbuntuLatest, InvokedTargets = new[] { nameof(Test), nameof(Push) })]
+//[AzurePipelines(
+//    AzurePipelinesImage.UbuntuLatest, 
+//    InvokedTargets = new[] { nameof(Test), nameof(Push) },
+//    TriggerBranchesInclude = new[] { "master", "develop" },
+//    ImportSecrets = new[] { nameof(NugetApiKey) })] // https://github.com/nuke-build/nuke/issues/531
 class Build : NukeBuild
 {
     public static int Main () => Execute<Build>(x => x.Compile);
@@ -33,7 +37,7 @@ class Build : NukeBuild
     [Parameter("Nuget feed - Where to publish te nuget packages")]
     readonly string NugetApiUrl = "https://api.nuget.org/v3/index.json";
     [Parameter("Nuget api key - Credentials to publish nuget packages")]
-    readonly string NugetApiKey;
+    readonly string NugetApiKey = "$NuGetSourceServerApiKey";
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
@@ -152,6 +156,18 @@ class Build : NukeBuild
                     .SetProject(p)
                     .SetOutput(ArtifactsDirectory / p.Name)));
         });
+
+    Target PublishArtifacts => _ => _
+    .DependsOn(Pack)
+    .Executes(() =>
+    {
+        AzurePipelines.Instance?.UploadArtifacts(NugetDirectory, "nugets", "package");
+
+        //AzurePipelines.Instance?.PublishCodeCoverage(
+        //    AzurePipelinesCodeCoverageToolType.Cobertura,
+        //    CoverageReportDirectory / "coverage.xml",
+        //    CoverageReportDirectory);
+    });
 
     Target GenerateClient => _ => _
         .DependsOn(Compile)
