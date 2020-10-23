@@ -96,7 +96,7 @@ class Build : NukeBuild
         });
 
     Target Pack => _ => _
-      .DependsOn(Compile)
+      .DependsOn(Test)
       .Produces(NugetDirectory) // Azure artifacts http://www.nuke.build/docs/authoring-builds/ci-integration.html
       .Executes(() =>
       {

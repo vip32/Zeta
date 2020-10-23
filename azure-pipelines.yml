@@ -30,14 +30,15 @@ stages:
     - task: GitVersion@5 # alternative https://github.com/adamralph/minver
       displayName: Apply git version
 
-    - task: UseDotNet@2
-      displayName: Install dotnet 3.0 Sdk
+    ### NUKE START ####################################
+    - task: UseDotNet@2 # gitversion needs 3.0
+      displayName: Nuke install dotnet 3.0 Sdk
       inputs:
         version: '3.0.x'
         packageType: sdk
 
-    - task: UseDotNet@2
-      displayName: Install dotnet 5.0 Sdk
+    - task: UseDotNet@2 # remove when 5.0 gets released
+      displayName: Nuke install dotnet 5.0 Sdk
       inputs:
         version: '5.0.x'
         packageType: sdk
@@ -48,8 +49,9 @@ stages:
       workingDirectory: $(System.DefaultWorkingDirectory)
 
     - script: './build.sh Push --nuget-api-key $(NuGetSourceServerApiKey)'
-      displayName: Nuke build/test/pack/push
+      displayName: Nuke compile/test/pack/push
       workingDirectory: $(System.DefaultWorkingDirectory)
+    ### NUKE END #######################################
 
     - task: DockerCompose@0 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/docker-compose?view=azure-devops
       displayName: Docker build images
