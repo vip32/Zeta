@@ -44,11 +44,9 @@ stages:
         packageType: sdk
         includePreviewVersions: true
 
-    - script: 'chmod +x ./build.sh'
-      displayName: Nuke script permissions
-      workingDirectory: $(System.DefaultWorkingDirectory)
-
-    - script: './build.sh Push --nuget-api-key $(NuGetSourceServerApiKey)'
+    - script: |
+        chmod +x ./build.sh
+        ./build.sh Push --nuget-api-key $(NuGetSourceServerApiKey)
       displayName: Nuke compile/test/pack/push
       workingDirectory: $(System.DefaultWorkingDirectory)
     ### NUKE END #######################################
