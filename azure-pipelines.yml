@@ -30,7 +30,14 @@ stages:
     - task: GitVersion@5 # alternative https://github.com/adamralph/minver
       displayName: Apply git version
 
+    - task: UseDotNet@2
+      displayName: Install dotnet SDK
+      inputs:
+        version: '5.0.x'
+        packageType: sdk
+
     - script: 'chmod +x ./build.sh'
+      displayName: Nuke permissions
       workingDirectory: $(System.DefaultWorkingDirectory)
 
     - script: './build.sh Push --nuget-api-key $(NuGetSourceServerApiKey)'

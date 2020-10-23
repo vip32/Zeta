@@ -13,7 +13,7 @@ TEMP_DIRECTORY="$SCRIPT_DIR//.tmp"
 
 DOTNET_GLOBAL_FILE="$SCRIPT_DIR//global.json"
 DOTNET_INSTALL_URL="https://dot.net/v1/dotnet-install.sh"
-DOTNET_CHANNEL= "5.0" # "Current" # https://docs.microsoft.com/de-de/dotnet/core/tools/dotnet-install-script
+DOTNET_CHANNEL= "Current" # https://docs.microsoft.com/de-de/dotnet/core/tools/dotnet-install-script
 
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
