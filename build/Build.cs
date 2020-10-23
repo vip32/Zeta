@@ -101,7 +101,7 @@ class Build : NukeBuild
         });
 
     Target Pack => _ => _
-      .DependsOn(Test)
+      .DependsOn(Compile)
       .Produces(NugetDirectory) // Azure artifacts http://www.nuke.build/docs/authoring-builds/ci-integration.html
       .Executes(() =>
       {
@@ -158,17 +158,17 @@ class Build : NukeBuild
                     .SetOutput(ArtifactsDirectory / p.Name)));
         });
 
-    Target PublishArtifacts => _ => _
-    .DependsOn(Pack)
-    .Executes(() =>
-    {
-        AzurePipelines.Instance?.UploadArtifacts(NugetDirectory, "nugets", "package");
+    //Target PublishArtifacts => _ => _
+    //.DependsOn(Pack)
+    //.Executes(() =>
+    //{
+    //    AzurePipelines.Instance?.UploadArtifacts(NugetDirectory, "nugets", "package");
 
-        //AzurePipelines.Instance?.PublishCodeCoverage(
-        //    AzurePipelinesCodeCoverageToolType.Cobertura,
-        //    CoverageReportDirectory / "coverage.xml",
-        //    CoverageReportDirectory);
-    });
+    //    //AzurePipelines.Instance?.PublishCodeCoverage(
+    //    //    AzurePipelinesCodeCoverageToolType.Cobertura,
+    //    //    CoverageReportDirectory / "coverage.xml",
+    //    //    CoverageReportDirectory);
+    //});
 
     Target GenerateClient => _ => _
         .DependsOn(Compile)
