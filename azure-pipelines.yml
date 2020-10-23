@@ -30,6 +30,9 @@ stages:
     - task: GitVersion@5 # alternative https://github.com/adamralph/minver
       displayName: Apply git version
 
+    - script: 'chmod +x ./build.sh'
+      workingDirectory: $(System.DefaultWorkingDirectory)
+
     - script: './build.sh Push --nuget-api-key $(NuGetSourceServerApiKey)'
       displayName: Nuke build/test/pack/push
       workingDirectory: $(System.DefaultWorkingDirectory)
