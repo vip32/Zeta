@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using Nuke.Common;
+using Nuke.Common.CI;
+using Nuke.Common.CI.AzurePipelines;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
@@ -21,6 +23,7 @@ using static Nuke.Common.Tools.Xunit.XunitTasks;
 
 [CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
+//[AzurePipelines(AzurePipelinesImage.UbuntuLatest, InvokedTargets = new[] { nameof(Test), nameof(Push) })]
 class Build : NukeBuild
 {
     public static int Main () => Execute<Build>(x => x.Compile);
@@ -94,6 +97,7 @@ class Build : NukeBuild
 
     Target Pack => _ => _
       .DependsOn(Compile)
+      .Produces(NugetDirectory) // Azure artifacts http://www.nuke.build/docs/authoring-builds/ci-integration.html
       .Executes(() =>
       {
           EnsureCleanDirectory(ArtifactsDirectory);

@@ -1,13 +1,8 @@
 variables:
-  - group: vars # azure pipelines variable group https://docs.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azdevops&tabs=yaml
-  - name: dockerImagesPush
-    value: 'true'
-  - name: azureSubscription
-    value: 'GlobalDocker 9f5f154e-0b5a-440f-811e-98f8295193a4'
-  - name: azureContainerRegistry
-    value: '{"loginServer":"globaldockerregistry.azurecr.io", "id" : "/subscriptions/9f5f154e-0b5a-440f-811e-98f8295193a4/resourceGroups/globaldocker/providers/Microsoft.ContainerRegistry/registries/globaldockerregistry"}'
-  - name: vmImage
-    value: 'ubuntu-latest' # needed for linux container build/push https://stackoverflow.com/questions/57732505/run-linux-containers-in-an-azure-devops-windows-hosted-build-agent
+  dockerImagesPush: true
+  azureSubscription: 'GlobalDocker 9f5f154e-0b5a-440f-811e-98f8295193a4'
+  azureContainerRegistry: '{"loginServer":"globaldockerregistry.azurecr.io", "id" : "/subscriptions/9f5f154e-0b5a-440f-811e-98f8295193a4/resourceGroups/globaldocker/providers/Microsoft.ContainerRegistry/registries/globaldockerregistry"}'
+  vmImage: 'ubuntu-latest' # needed for linux container build/push https://stackoverflow.com/questions/57732505/run-linux-containers-in-an-azure-devops-windows-hosted-build-agent
 
 trigger:
 - master
@@ -29,11 +24,6 @@ stages:
     steps:
     - task: GitVersion@5 # alternative https://github.com/adamralph/minver
       displayName: Apply git version
-
-    - task: CmdLine@2
-      displayName: Nuke build/test/pack/push
-      inputs:
-        script: './build.cmd Push --nuget-api-key $(NuGetSourceServerApiKey)'
 
     - task: DockerCompose@0 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/docker-compose?view=azure-devops
       displayName: Docker build images
