@@ -70,6 +70,7 @@ class Build : NukeBuild
         });
 
     Target Compile => _ => _
+        .DependsOn(Clean)
         .DependsOn(Restore)
         .Executes(() =>
         {
