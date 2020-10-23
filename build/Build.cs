@@ -27,6 +27,10 @@ class Build : NukeBuild
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+    [Parameter("Nuget feed - Where to publish te nuget packages")]
+    readonly string NugetApiUrl = "https://api.nuget.org/v3/index.json";
+    [Parameter("Nuget api key - Credentials to publish nuget packages")]
+    readonly string NugetApiKey;
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
@@ -40,15 +44,14 @@ class Build : NukeBuild
 
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
 
+    AbsolutePath NugetDirectory => ArtifactsDirectory / ".nuget";
+
     Target Clean => _ => _
         .Before(Restore)
         .Executes(() =>
         {
-            FoundationSourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-            FoundationSourceDirectory.GlobDirectories("**/TestResults").ForEach(DeleteDirectory);
-            ServicesSourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-            ServicesSourceDirectory.GlobDirectories("**/TestResults").ForEach(DeleteDirectory);
-            ServicesSourceDirectory.GlobDirectories("**/logs").ForEach(DeleteDirectory);
+            FoundationSourceDirectory.GlobDirectories("**/bin", "**/obj", "**/TestResults").ForEach(DeleteDirectory);
+            ServicesSourceDirectory.GlobDirectories("**/bin", "**/obj", "**/TestResults", "**/logs").ForEach(DeleteDirectory);
             EnsureCleanDirectory(ArtifactsDirectory);
         });
 
@@ -76,24 +79,60 @@ class Build : NukeBuild
         .After(Compile)
         .Executes(() =>
         {
-            var testProjects = Solution.AllProjects.Where(project =>
-                project.Name.EndsWith("Tests"));
+            var projects = Solution.AllProjects.Where(p =>
+                p.Name.EndsWith("Tests"));
             DotNetTest(t => t
                 .EnableNoBuild()
                 .EnableNoRestore()
                 .SetConfiguration(Configuration)
-                .CombineWith(testProjects, (x, p) => x
+                .CombineWith(projects, (s, p) => s
                     .SetProjectFile(p)
                     .SetWorkingDirectory(p.Directory)
                     .SetResultsDirectory("TestResults/")
                     .SetLogger("trx")));
         });
 
+    Target Pack => _ => _
+      .DependsOn(Compile)
+      .Executes(() =>
+      {
+          var projects = Solution.AllProjects.Where(p =>
+             p.Name.StartsWith("Foundation"));
+          DotNetPack(s => s
+              .EnableNoBuild()
+              .EnableNoRestore()
+              .SetVersion(GitVersion.NuGetVersionV2)
+              .SetNoDependencies(true)
+              .SetConfiguration(Configuration)
+              .CombineWith(projects, (s, p) => s
+                .SetProject(p)
+                .SetOutputDirectory(NugetDirectory)));
+      });
+
+    Target Push => _ => _
+       .DependsOn(Pack)
+       .Requires(() => NugetApiUrl)
+       .Requires(() => NugetApiKey)
+       .Executes(() =>
+       {
+           GlobFiles(NugetDirectory, "*.nupkg")
+               .NotEmpty()
+               .Where(f => !f.EndsWith("symbols.nupkg"))
+               .ForEach(f =>
+               {
+                   DotNetNuGetPush(s => s
+                       .SetTargetPath(f)
+                       .SetSource(NugetApiUrl)
+                       .SetApiKey(NugetApiKey)
+                   );
+               });
+       });
+
     Target Publish => _ => _
         .After(Test)
         .Executes(() =>
         {
-            var projectSolution = Solution.AllProjects.Where(p =>
+            var projects = Solution.AllProjects.Where(p =>
                 !p.Name.Contains("Tests")
                 && !p.Name.Contains("build")
                 && p.Is(ProjectType.CSharpProject));
@@ -104,7 +143,7 @@ class Build : NukeBuild
                 .SetFileVersion(GitVersion.AssemblySemFileVer)
                 .SetInformationalVersion(GitVersion.InformationalVersion)
                 .EnableNoRestore()
-                .CombineWith(projectSolution, (x, p) => x
+                .CombineWith(projects, (x, p) => x
                     .SetProject(p)
                     .SetOutput(ArtifactsDirectory / p.Name)));
         });
