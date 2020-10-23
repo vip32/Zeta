@@ -31,7 +31,13 @@ stages:
       displayName: Apply git version
 
     - task: UseDotNet@2
-      displayName: Install dotnet Sdk
+      displayName: Install dotnet 3.0 Sdk
+      inputs:
+        version: '3.0.x'
+        packageType: sdk
+
+    - task: UseDotNet@2
+      displayName: Install dotnet 5.0 Sdk
       inputs:
         version: '5.0.x'
         packageType: sdk
