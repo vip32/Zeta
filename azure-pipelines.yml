@@ -45,8 +45,9 @@ stages:
         includePreviewVersions: true
 
     - script: |
+        printenv
         chmod +x ./build.sh
-        ./build.sh Push --nuget-api-key $(NuGetSourceServerApiKey)
+        ./build.sh Push
 
       displayName: Nuke compile/test/pack/push
       workingDirectory: $(System.DefaultWorkingDirectory)
