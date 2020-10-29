@@ -41,7 +41,11 @@
             {
                 context.Response.OnStarting(() =>
                 {
-                    context.Response.Headers.Add(this.options.Header, new[] { context.TraceIdentifier });
+                    if(!context.Response.Headers.ContainsKey(this.options.Header))
+                    {
+                        context.Response.Headers.Add(this.options.Header, new[] { context.TraceIdentifier });
+                    }
+
                     return Task.CompletedTask;
                 });
             }

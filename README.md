@@ -1,3 +1,4 @@
+[![Build Status](https://vip32.visualstudio.com/Zeta/_apis/build/status/vip32.Zeta?branchName=master)](https://vip32.visualstudio.com/Zeta/_build/latest?definitionId=12&branchName=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=vip32_Zeta&metric=alert_status)](https://sonarcloud.io/dashboard?id=vip32_Zeta)
 
 # Zeta

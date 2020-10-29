@@ -24,7 +24,7 @@ using static Nuke.Common.Tools.Xunit.XunitTasks;
 [CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
 //[AzurePipelines(
-//    AzurePipelinesImage.UbuntuLatest, 
+//    AzurePipelinesImage.UbuntuLatest,
 //    InvokedTargets = new[] { nameof(Test), nameof(Push) },
 //    TriggerBranchesInclude = new[] { "master", "develop" },
 //    ImportSecrets = new[] { nameof(NugetApiKey) })] // https://github.com/nuke-build/nuke/issues/531
@@ -37,7 +37,7 @@ class Build : NukeBuild
     [Parameter("Nuget feed - Where to publish te nuget packages")]
     readonly string NugetApiUrl = "https://api.nuget.org/v3/index.json";
     [Parameter("Nuget api key - Credentials to publish nuget packages")]
-    readonly string NugetApiKey = "$NuGetSourceServerApiKey";
+    readonly string NugetApiKey;
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
