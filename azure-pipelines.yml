@@ -1,5 +1,5 @@
 variables:
-  - group: vars # azure pipelines variable group https://docs.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azdevops&tabs=yaml
+  - group: vars
   - name: dockerImagesPush
     value: 'true'
   - name: azureSubscription
@@ -45,11 +45,10 @@ stages:
         includePreviewVersions: true
 
     - script: |
-        printenv
         chmod +x ./build.sh
         ./build.sh Push
 
-      displayName: Nuke compile/test/pack/push
+      displayName: Nuke build
       workingDirectory: $(System.DefaultWorkingDirectory)
     ### NUKE END #######################################
 
