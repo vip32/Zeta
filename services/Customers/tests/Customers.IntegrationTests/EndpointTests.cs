@@ -5,16 +5,20 @@
     using System.Threading.Tasks;
     using Newtonsoft.Json;
     using Xunit;
+    using Xunit.Abstractions;
     using Zeta.Customers.Presentation.Web;
     using Zeta.Foundation;
 
     public class EndpointTests : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
+        private readonly ITestOutputHelper testOutputHelper;
         private readonly HttpClient client;
 
-        public EndpointTests(CustomWebApplicationFactory<Startup> factory)
+        public EndpointTests(ITestOutputHelper testOutputHelper)
         {
+            using var factory = new CustomWebApplicationFactory<Startup>(testOutputHelper);
             this.client = factory.CreateClient();
+            this.testOutputHelper = testOutputHelper;
         }
 
         [Fact]

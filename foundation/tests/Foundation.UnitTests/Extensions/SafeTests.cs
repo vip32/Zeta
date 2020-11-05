@@ -1,4 +1,4 @@
-﻿namespace Zeta.Foundation
+﻿namespace Zeta.Foundation.UnitTests
 {
     using Shouldly;
     using Xunit;
