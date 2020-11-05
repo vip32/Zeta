@@ -4,6 +4,7 @@
     using System.Net.Http;
     using System.Threading.Tasks;
     using Newtonsoft.Json;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
     using Zeta.Customers.Presentation.Web;
@@ -23,11 +24,12 @@
             this.client = factory.CreateClient();
         }
 
-        [Fact]
-        public async Task CreateSwaggerJsonTest()
+        [Theory]
+        [InlineData("/swagger/v1/swagger.json")]
+        public async Task CreateSwaggerJsonTest(string route)
         {
             // arrange + act
-            var response = await this.client.GetAsync("/swagger/v1/swagger.json").ConfigureAwait(false);
+            var response = await this.client.GetAsync(route).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -49,17 +51,18 @@
 
         // TODO: create swagger.json based typed httpclient/ts client >> https://stu.dev/generating-typed-client-for-httpclientfactory-with-nswag/
 
-        [Fact]
-        public async Task EchoGetTest()
+        [Theory]
+        [InlineData("api/v1/_echo")]
+        public async Task EchoGetTest(string route)
         {
             // arrange + act
-            var response = await this.client.GetAsync("api/v1/_echo").ConfigureAwait(false);
+            var response = await this.client.GetAsync(route).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var result = JsonConvert.DeserializeObject<object>(stringResponse);
 
             // assert
-            Assert.NotNull(result);
+            result.ShouldNotBeNull();
         }
 
         //        [Fact]
