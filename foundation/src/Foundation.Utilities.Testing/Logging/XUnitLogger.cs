@@ -35,10 +35,10 @@
             Exception exception,
             Func<TState, Exception, string> formatter)
         {
-            var sb = new StringBuilder();
-            sb.Append(GetLogLevelString(logLevel))
-              .Append(" [").Append(this.categoryName).Append("] ")
-              .Append(formatter(state, exception));
+            var sb = new StringBuilder()
+                .Append(GetLogLevelString(logLevel))
+                .Append(" [").Append(this.categoryName).Append("] ")
+                .Append(formatter(state, exception));
 
             if (exception != null)
             {
