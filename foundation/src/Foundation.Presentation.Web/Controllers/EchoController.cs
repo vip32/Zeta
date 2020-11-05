@@ -25,7 +25,7 @@
         [Description("Echo")]
         public ActionResult Get()
         {
-            this.logger.LogInformation($"GET echo: {this.GetType().Namespace}");
+            this.logger.LogInformation($"echo {this.GetType().Namespace}");
 
             return this.Ok(
                 new

@@ -31,7 +31,8 @@
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<TStartup>();
-                    webBuilder.ConfigureLogging(loggingBuilder => loggingBuilder.Services.AddSingleton<ILoggerProvider>(serviceProvider => new XUnitLoggerProvider(this.testOutputHelper)));
+                    webBuilder.ConfigureLogging(loggingBuilder => loggingBuilder
+                        .Services.AddSingleton<ILoggerProvider>(sp => new XUnitLoggerProvider(this.testOutputHelper)));
                     webBuilder.ConfigureTestServices(services => services
                         .AddAuthentication(options => // add a fake authentication handler
                         {

@@ -15,9 +15,11 @@
 
         public EndpointTests(ITestOutputHelper testOutputHelper)
         {
-            using var factory = new CustomWebApplicationFactory<Startup>(testOutputHelper);
-            this.client = factory.CreateClient();
             this.testOutputHelper = testOutputHelper;
+#pragma warning disable CA2000 // Dispose objects before losing scope
+            var factory = new CustomWebApplicationFactory<Startup>(testOutputHelper);
+#pragma warning restore CA2000 // Dispose objects before losing scope
+            this.client = factory.CreateClient();
         }
 
         //[Fact]
@@ -46,12 +48,13 @@
         [Fact]
         public async Task EchoGetTest()
         {
+            // arrange + act
             var response = await this.client.GetAsync("api/v1/_echo").ConfigureAwait(false);
-
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var result = JsonConvert.DeserializeObject<object>(stringResponse);
 
+            // assert
             Assert.NotNull(result);
         }
 

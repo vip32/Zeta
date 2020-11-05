@@ -12,6 +12,7 @@
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
 
     //[Authorize]
     [ApiController]
@@ -19,48 +20,60 @@
     [Route("api/v{version:apiVersion}/_systeminformation")]
     public class SystemInformationController : ControllerBase
     {
+        private readonly ILogger<SystemInformationController> logger;
+
+        public SystemInformationController(ILogger<SystemInformationController> logger)
+        {
+            this.logger = logger;
+        }
+
         [HttpGet]
         [ProducesResponseType(typeof(SystemInformation), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]
-        public async Task<SystemInformation> Get() => new SystemInformation
+        public async Task<SystemInformation> Get()
         {
-            Request = new Dictionary<string, object>
+            this.logger.LogInformation("gathering system information");
+
+            return new SystemInformation
             {
-                ["correlationId"] = this.HttpContext.TraceIdentifier,
-                ["isLocal"] = IsLocal(this.HttpContext.Request),
-                ["host"] = Dns.GetHostName(),
-                ["ip"] = (await Dns.GetHostAddressesAsync(Dns.GetHostName()).AnyContext()).Select(i => i.ToString()).Where(i => i.Contains(".", StringComparison.OrdinalIgnoreCase)),
-                //["userIdentity"] = this.HttpContext.User?.Identity,
-                //["username"] = this.HttpContext.User?.Identity?.Name
-            },
-            Runtime = new Dictionary<string, object>
-            {
-                ["name"] = Assembly.GetEntryAssembly().GetName().Name,
-                ["version"] = Assembly.GetEntryAssembly().GetName().Version.ToString(),
-                //["versionFile"] = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version,
-                ["versionInformation"] = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion,
-                ["buildDate"] = GetBuildDate(Assembly.GetEntryAssembly()).ToString("o"),
-                ["processName"] = Process.GetCurrentProcess().ProcessName.Equals("dotnet", StringComparison.InvariantCultureIgnoreCase) ? $"{Process.GetCurrentProcess().ProcessName} (kestrel)" : Process.GetCurrentProcess().ProcessName,
-                ["framework"] = RuntimeInformation.FrameworkDescription,
-                ["osDescription"] = RuntimeInformation.OSDescription,
-                ["osArchitecture"] = RuntimeInformation.OSArchitecture.ToString(),
-                ["processorCount"] = Environment.ProcessorCount.ToString(),
-            },
-            Identity = new Dictionary<string, object>
-            {
-                ["authenticated"] = this.HttpContext.User?.Identity?.IsAuthenticated,
-                ["name"] = this.HttpContext.User.Identity.Name,
-                ["claims"] = this.HttpContext.User?.Claims?.Any() == true ? this.HttpContext.User?.Claims?.Select(h => $"{h.Type}={h.Value}").Aggregate((i, j) => i + " | " + j) : null,
-                //["idToken"] = this.HttpContext.GetTokenAsync("id_token").Result,
-                ["accessToken"] = this.HttpContext.GetTokenAsync("access_token").Result,
-            }
-        };
+                Request = new Dictionary<string, object>
+                {
+                    ["correlationId"] = this.HttpContext?.TraceIdentifier,
+                    ["isLocal"] = IsLocal(this.HttpContext?.Request),
+                    ["host"] = Dns.GetHostName(),
+                    ["ip"] = (await Dns.GetHostAddressesAsync(Dns.GetHostName()).AnyContext()).Select(i => i.ToString()).Where(i => i.Contains(".", StringComparison.OrdinalIgnoreCase)),
+                    //["userIdentity"] = this.HttpContext.User?.Identity,
+                    //["username"] = this.HttpContext.User?.Identity?.Name
+                },
+                Runtime = new Dictionary<string, object>
+                {
+                    ["name"] = Assembly.GetEntryAssembly().GetName().Name,
+                    ["version"] = Assembly.GetEntryAssembly().GetName().Version.ToString(),
+                    //["versionFile"] = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version,
+                    ["versionInformation"] = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion,
+                    ["buildDate"] = GetBuildDate(Assembly.GetEntryAssembly()).ToString("o"),
+                    ["processName"] = Process.GetCurrentProcess().ProcessName.Equals("dotnet", StringComparison.InvariantCultureIgnoreCase) ? $"{Process.GetCurrentProcess().ProcessName} (kestrel)" : Process.GetCurrentProcess().ProcessName,
+                    ["framework"] = RuntimeInformation.FrameworkDescription,
+                    ["osDescription"] = RuntimeInformation.OSDescription,
+                    ["osArchitecture"] = RuntimeInformation.OSArchitecture.ToString(),
+                    ["processorCount"] = Environment.ProcessorCount.ToString(),
+                },
+                Identity = new Dictionary<string, object>
+                {
+                    ["authenticated"] = this.HttpContext?.User?.Identity?.IsAuthenticated,
+                    ["name"] = this.HttpContext?.User.Identity.Name,
+                    ["claims"] = this.HttpContext?.User?.Claims?.Any() == true ? this.HttpContext?.User?.Claims?.Select(h => $"{h.Type}={h.Value}").Aggregate((i, j) => i + " | " + j) : null,
+                    //["idToken"] = this.HttpContext.GetTokenAsync("id_token").Result,
+                    ["accessToken"] = this.HttpContext?.GetTokenAsync("access_token").Result,
+                }
+            };
+        }
 
         private static bool IsLocal(HttpRequest source)
         {
             // https://stackoverflow.com/a/41242493/7860424
-            var connection = source.HttpContext.Connection;
-            if (IsIpAddressSet(connection.RemoteIpAddress))
+            var connection = source?.HttpContext?.Connection;
+            if (IsIpAddressSet(connection?.RemoteIpAddress))
             {
                 return IsIpAddressSet(connection.LocalIpAddress)
                     //if local is same as remote, then we are local

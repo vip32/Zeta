@@ -18,10 +18,10 @@
             this.categoryName = categoryName;
         }
 
-        public static ILogger CreateLogger(ITestOutputHelper testOutputHelper) => 
+        public static ILogger Create(ITestOutputHelper testOutputHelper) =>
             new XUnitLogger(testOutputHelper, new LoggerExternalScopeProvider(), string.Empty);
 
-        public static ILogger<T> CreateLogger<T>(ITestOutputHelper testOutputHelper) => 
+        public static ILogger<T> Create<T>(ITestOutputHelper testOutputHelper) =>
             new XUnitLogger<T>(testOutputHelper, new LoggerExternalScopeProvider());
 
         public bool IsEnabled(LogLevel logLevel) => logLevel != LogLevel.None;
@@ -29,10 +29,10 @@
         public IDisposable BeginScope<TState>(TState state) => this.scopeProvider.Push(state);
 
         public void Log<TState>(
-            LogLevel logLevel, 
-            EventId eventId, 
-            TState state, 
-            Exception exception, 
+            LogLevel logLevel,
+            EventId eventId,
+            TState state,
+            Exception exception,
             Func<TState, Exception, string> formatter)
         {
             var sb = new StringBuilder();
