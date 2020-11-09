@@ -27,6 +27,7 @@ using static Nuke.Common.Tools.Xunit.XunitTasks;
 //    AzurePipelinesImage.UbuntuLatest,
 //    InvokedTargets = new[] { nameof(Test), nameof(Push) },
 //    TriggerBranchesInclude = new[] { "master", "develop" },
+//    ImportVariableGroups = new[] { "vars"},
 //    ImportSecrets = new[] { nameof(NugetApiKey) })] // https://github.com/nuke-build/nuke/issues/531
 class Build : NukeBuild
 {
