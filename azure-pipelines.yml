@@ -37,12 +37,12 @@ stages:
         version: '3.0.x'
         packageType: sdk
 
-    # - task: UseDotNet@2 # remove when 5.0 gets released
-    #   displayName: Nuke install dotnet 5.0 Sdk
-    #   inputs:
-    #     version: '5.0.x'
-    #     packageType: sdk
-    #     includePreviewVersions: true
+    - task: UseDotNet@2 # remove when 5.0 gets released (gobal.json)
+      displayName: Nuke install dotnet 5.0 Sdk
+      inputs:
+        version: '5.0.x'
+        packageType: sdk
+        includePreviewVersions: true
 
     - script: |
         chmod +x ./build.sh
