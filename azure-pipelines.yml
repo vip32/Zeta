@@ -31,11 +31,11 @@ stages:
       displayName: Apply git version
 
     ### NUKE START ####################################
-    # - task: UseDotNet@2 # gitversion needs 3.0
-    #   displayName: Nuke install dotnet 3.0 Sdk
-    #   inputs:
-    #     version: '3.0.x'
-    #     packageType: sdk
+    - task: UseDotNet@2 # gitversion needs 3.0
+      displayName: Nuke install dotnet 3.0 Sdk
+      inputs:
+        version: '3.0.x'
+        packageType: sdk
 
     # - task: UseDotNet@2 # remove when 5.0 gets released
     #   displayName: Nuke install dotnet 5.0 Sdk
