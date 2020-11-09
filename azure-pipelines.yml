@@ -32,9 +32,9 @@ stages:
 
     ### NUKE START ####################################
     - task: UseDotNet@2 # gitversion needs 3.0
-      displayName: Nuke install dotnet 3.0 Sdk
+      displayName: Nuke install dotnet 3.1 Sdk
       inputs:
-        version: '3.0.x'
+        version: '3.1.x'
         packageType: sdk
 
     - task: UseDotNet@2 # remove when 5.0 gets released (gobal.jsons)

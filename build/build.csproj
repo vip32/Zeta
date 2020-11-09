@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Zeta.Build</RootNamespace>
     <AssemblyName>Zeta.Build</AssemblyName>
     <NoWarn>CS0649;CS0169</NoWarn>
@@ -16,7 +16,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageDownload Include="GitVersion.Tool" Version="[5.1.2]" />
+    <PackageDownload Include="GitVersion.Tool" Version="[5.1.3]" />
   </ItemGroup>
 
 </Project>
