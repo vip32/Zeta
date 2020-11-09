@@ -122,6 +122,7 @@ class Build : NukeBuild
        .DependsOn(Pack)
        .Requires(() => NugetApiUrl)
        .Requires(() => NugetApiKey)
+       .OnlyWhenStatic(() => IsServerBuild)
        .Executes(() =>
        {
            GlobFiles(NugetDirectory, "*.nupkg")
