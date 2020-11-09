@@ -41,7 +41,7 @@ class Build : NukeBuild
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
-    [GitVersion(Framework="netcoreapp3.0")] readonly GitVersion GitVersion;
+    [GitVersion/*(Framework="netcoreapp3.0")*/] readonly GitVersion GitVersion;
 
     AbsolutePath SourceDirectory => RootDirectory / "src"; // TODO
 
