@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
-using Nuke.Common.CI.AzurePipelines;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
@@ -13,13 +12,10 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Tools.NSwag;
 using Nuke.Common.Utilities.Collections;
-using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
-using static Nuke.Common.Tools.Docker.DockerTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.NSwag.NSwagTasks;
-using static Nuke.Common.Tools.Xunit.XunitTasks;
 
 [CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
@@ -27,6 +23,7 @@ using static Nuke.Common.Tools.Xunit.XunitTasks;
 //    AzurePipelinesImage.UbuntuLatest,
 //    InvokedTargets = new[] { nameof(Test), nameof(Push) },
 //    TriggerBranchesInclude = new[] { "master", "develop" },
+//    ImportVariableGroups = new[] { "vars"},
 //    ImportSecrets = new[] { nameof(NugetApiKey) })] // https://github.com/nuke-build/nuke/issues/531
 class Build : NukeBuild
 {
@@ -41,7 +38,7 @@ class Build : NukeBuild
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
-    [GitVersion] readonly GitVersion GitVersion;
+    [GitVersion(Framework = "netcoreapp3.1")] readonly GitVersion GitVersion;
 
     AbsolutePath SourceDirectory => RootDirectory / "src"; // TODO
 
@@ -94,7 +91,7 @@ class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .CombineWith(projects, (s, p) => s
                     .SetProjectFile(p)
-                    .SetWorkingDirectory(p.Directory)
+                    .SetProcessWorkingDirectory(p.Directory)
                     .SetResultsDirectory("TestResults/")
                     .SetLogger("trx")));
         });
@@ -122,6 +119,7 @@ class Build : NukeBuild
        .DependsOn(Pack)
        .Requires(() => NugetApiUrl)
        .Requires(() => NugetApiKey)
+       .OnlyWhenStatic(() => IsServerBuild)
        .Executes(() =>
        {
            GlobFiles(NugetDirectory, "*.nupkg")

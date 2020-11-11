@@ -1,1 +1,0 @@
-powershell.exe -noexit "& '%~dp0cleanvsprojects.ps1'"
