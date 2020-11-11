@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
+//using Nuke.Common.CI.AzurePipelines;
+//using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
@@ -19,11 +21,18 @@ using static Nuke.Common.Tools.NSwag.NSwagTasks;
 
 [CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
+//[GitHubActions("github-actions",
+//    GitHubActionsImage.UbuntuLatest,
+//    AutoGenerate = true,
+//    OnPushBranches = new[] { "master", "develop" },
+//    OnPullRequestBranches = new[] { "features/*" },
+//    InvokedTargets = new[] { nameof(Test), nameof(Push) },
+//    ImportSecrets = new[] { nameof(NugetApiKey) })]
 //[AzurePipelines(
 //    AzurePipelinesImage.UbuntuLatest,
 //    InvokedTargets = new[] { nameof(Test), nameof(Push) },
 //    TriggerBranchesInclude = new[] { "master", "develop" },
-//    ImportVariableGroups = new[] { "vars"},
+//    ImportVariableGroups = new[] { "vars" },
 //    ImportSecrets = new[] { nameof(NugetApiKey) })] // https://github.com/nuke-build/nuke/issues/531
 class Build : NukeBuild
 {
