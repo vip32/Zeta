@@ -23,6 +23,19 @@
       "problemMatcher": "$msCompile"
     },
     {
+      "label": "build (nuke)",
+      "command": "./build.cmd",
+      "type": "shell",
+      "args": [],
+      "group": {
+        "kind": "build"
+      },
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
       "label": "clean",
       "command": "dotnet",
       "type": "shell",

@@ -23,6 +23,7 @@ using static Nuke.Common.Tools.NSwag.NSwagTasks;
 //    AzurePipelinesImage.UbuntuLatest,
 //    InvokedTargets = new[] { nameof(Test), nameof(Push) },
 //    TriggerBranchesInclude = new[] { "master", "develop" },
+//    ImportVariableGroups = new[] { "vars"},
 //    ImportSecrets = new[] { nameof(NugetApiKey) })] // https://github.com/nuke-build/nuke/issues/531
 class Build : NukeBuild
 {
@@ -37,7 +38,7 @@ class Build : NukeBuild
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
-    [GitVersion] readonly GitVersion GitVersion;
+    [GitVersion(Framework = "netcoreapp3.1")] readonly GitVersion GitVersion;
 
     AbsolutePath SourceDirectory => RootDirectory / "src"; // TODO
 
@@ -90,7 +91,7 @@ class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .CombineWith(projects, (s, p) => s
                     .SetProjectFile(p)
-                    .SetWorkingDirectory(p.Directory)
+                    .SetProcessWorkingDirectory(p.Directory)
                     .SetResultsDirectory("TestResults/")
                     .SetLogger("trx")));
         });
@@ -118,6 +119,7 @@ class Build : NukeBuild
        .DependsOn(Pack)
        .Requires(() => NugetApiUrl)
        .Requires(() => NugetApiKey)
+       .OnlyWhenStatic(() => IsServerBuild)
        .Executes(() =>
        {
            GlobFiles(NugetDirectory, "*.nupkg")
