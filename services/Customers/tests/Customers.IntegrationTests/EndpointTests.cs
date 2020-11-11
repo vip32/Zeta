@@ -1,8 +1,10 @@
 ﻿namespace Zeta.Customers.IntegrationTests
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using Shouldly;
     using Xunit;
@@ -19,7 +21,16 @@
         {
             this.testOutputHelper = testOutputHelper;
 #pragma warning disable CA2000 // Dispose objects before losing scope
-            var factory = new CustomWebApplicationFactory<Startup>(testOutputHelper);
+            var factory = new CustomWebApplicationFactory<Startup>(
+                testOutputHelper,
+                s => s.AddSingleton(
+                    new FakeAuthenticationHandlerOptions()
+                    {
+                        Claims = new Dictionary<string, string>
+                        {
+                            ["origin"] = "endpointtest",
+                        }
+                    }));
 #pragma warning restore CA2000 // Dispose objects before losing scope
             this.client = factory.CreateClient();
         }

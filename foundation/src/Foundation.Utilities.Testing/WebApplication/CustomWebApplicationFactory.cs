@@ -57,6 +57,8 @@
                         .Services.AddSingleton<ILoggerProvider>(sp => new XUnitLoggerProvider(this.testOutputHelper)));
                     webBuilder.ConfigureTestServices(services =>
                     {
+                        this.servicesConfiguration?.Invoke(services);
+
                         if (this.fakeAuthenticationHelperEnabled)
                         {
                             services.AddAuthentication(options => // add a fake authentication handler
@@ -66,8 +68,6 @@
                             })
                             .AddScheme<AuthenticationSchemeOptions, FakeAuthenticationHandler>(FakeAuthenticationHandler.SchemeName, null);
                         }
-
-                        this.servicesConfiguration?.Invoke(services);
                     });
                 });
         }
