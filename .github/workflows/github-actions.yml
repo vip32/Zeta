@@ -24,7 +24,7 @@ on:
       - refs/tags/v*
   pull_request:
     branches:
-      - feature/*
+      - features/*
 
 jobs:
   windows-latest:

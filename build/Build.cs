@@ -27,14 +27,14 @@ using static Nuke.Common.Tools.NSwag.NSwagTasks;
     PublishArtifacts = true,
     InvokedTargets = new[] { nameof(Test), nameof(Pack) },
     OnPushBranches = new[] { "master", "develop", "refs/tags/v*" },
-    OnPullRequestBranches = new[] { "feature/*" },
+    OnPullRequestBranches = new[] { "features/*" },
     ImportSecrets = new[] { nameof(NugetApiKey) })]
 [AzurePipelines(
     AzurePipelinesImage.UbuntuLatest,
     AutoGenerate = true,
     InvokedTargets = new[] { nameof(Test), nameof(Pack) },
-    TriggerBranchesInclude = new[] { "master", "develop", "feature/*", "refs/tags/v*" },
-    PullRequestsBranchesInclude = new[] { "feature/*" },
+    TriggerBranchesInclude = new[] { "master", "develop", "features/*", "refs/tags/v*" },
+    PullRequestsBranchesInclude = new[] { "features/*" },
     ImportVariableGroups = new[] { "vars" },
     ImportSecrets = new[] { nameof(NugetApiKey) })] // https://github.com/nuke-build/nuke/issues/531
 class Build : NukeBuild
