@@ -2,8 +2,8 @@ using System;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
-//using Nuke.Common.CI.AzurePipelines;
-//using Nuke.Common.CI.GitHubActions;
+using Nuke.Common.CI.AzurePipelines;
+using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
@@ -21,19 +21,22 @@ using static Nuke.Common.Tools.NSwag.NSwagTasks;
 
 [CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
-//[GitHubActions("github-actions",
-//    GitHubActionsImage.UbuntuLatest,
-//    AutoGenerate = true,
-//    OnPushBranches = new[] { "master", "develop" },
-//    OnPullRequestBranches = new[] { "features/*" },
-//    InvokedTargets = new[] { nameof(Test), nameof(Push) },
-//    ImportSecrets = new[] { nameof(NugetApiKey) })]
-//[AzurePipelines(
-//    AzurePipelinesImage.UbuntuLatest,
-//    InvokedTargets = new[] { nameof(Test), nameof(Push) },
-//    TriggerBranchesInclude = new[] { "master", "develop" },
-//    ImportVariableGroups = new[] { "vars" },
-//    ImportSecrets = new[] { nameof(NugetApiKey) })] // https://github.com/nuke-build/nuke/issues/531
+[GitHubActions("github-actions",
+    GitHubActionsImage.UbuntuLatest,
+    AutoGenerate = true,
+    PublishArtifacts = true,
+    InvokedTargets = new[] { nameof(Test)/*, nameof(Push)*/ },
+    OnPushBranches = new[] { "master", "develop", "refs/tags/v*" },
+    OnPullRequestBranches = new[] { "feature/*" },
+    ImportSecrets = new[] { nameof(NugetApiKey) })]
+[AzurePipelines(
+    AzurePipelinesImage.UbuntuLatest,
+    AutoGenerate = true,
+    InvokedTargets = new[] { nameof(Test)/*, nameof(Push)*/ },
+    TriggerBranchesInclude = new[] { "master", "develop", "feature/*", "refs/tags/v*" },
+    PullRequestsBranchesInclude = new[] { "feature/*" },
+    ImportVariableGroups = new[] { "vars" },
+    ImportSecrets = new[] { nameof(NugetApiKey) })] // https://github.com/nuke-build/nuke/issues/531
 class Build : NukeBuild
 {
     public static int Main () => Execute<Build>(x => x.Compile);
@@ -60,7 +63,7 @@ class Build : NukeBuild
     AbsolutePath NugetDirectory => ArtifactsDirectory / ".nuget";
 
     Target Clean => _ => _
-        .Before(Restore)
+        //.Before(Restore)
         .Executes(() =>
         {
             FoundationSourceDirectory.GlobDirectories("**/bin", "**/obj", "**/TestResults").ForEach(DeleteDirectory);
@@ -89,7 +92,7 @@ class Build : NukeBuild
         });
 
     Target Test => _ => _
-        .After(Compile)
+        .DependsOn(Compile)
         .Executes(() =>
         {
             var projects = Solution.AllProjects.Where(p =>
@@ -106,7 +109,7 @@ class Build : NukeBuild
         });
 
     Target Pack => _ => _
-      .DependsOn(Compile)
+      .DependsOn(Test)
       .Produces(NugetDirectory) // Azure artifacts http://www.nuke.build/docs/authoring-builds/ci-integration.html
       .Executes(() =>
       {

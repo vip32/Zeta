@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{25F5DD
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		azure-pipelines.container.yml = azure-pipelines.container.yml
 		docs\docker-images.txt = docs\docker-images.txt
 		tools\imports\keycloak-realm-export.json = tools\imports\keycloak-realm-export.json
 		README.md = README.md
