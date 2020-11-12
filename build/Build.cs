@@ -30,7 +30,7 @@ using static Nuke.Common.Tools.NSwag.NSwagTasks;
     OnPullRequestBranches = new[] { "features/*" },
     ImportSecrets = new[] { nameof(NugetApiKey) })]
 [AzurePipelines(
-    AzurePipelinesImage.UbuntuLatest,
+    AzurePipelinesImage.WindowsLatest,
     AutoGenerate = true,
     InvokedTargets = new[] { nameof(Test), nameof(Pack) },
     TriggerBranchesInclude = new[] { "master", "develop", "features/*", "refs/tags/v*" },

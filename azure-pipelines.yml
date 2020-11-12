@@ -26,11 +26,11 @@ trigger:
       - refs/tags/v*
 
 stages:
-  - stage: ubuntu_latest
-    displayName: 'ubuntu-latest'
+  - stage: windows_latest
+    displayName: 'windows-latest'
     dependsOn: [  ]
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'windows-latest'
     jobs:
       - job: Restore
         displayName: 'Restore'
