@@ -114,12 +114,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Presentation.Web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "build", "build\build.csproj", "{AA3CABD0-5CEF-405C-A657-CCF41B5D1646}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "_build\_build.csproj", "{57FDE63C-31D1-4404-9F8B-02B73A9055D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{57FDE63C-31D1-4404-9F8B-02B73A9055D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57FDE63C-31D1-4404-9F8B-02B73A9055D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92397745-EB7A-4CEB-95ED-CB572A9182A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{92397745-EB7A-4CEB-95ED-CB572A9182A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92397745-EB7A-4CEB-95ED-CB572A9182A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
