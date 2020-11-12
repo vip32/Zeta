@@ -1,10 +1,12 @@
 ﻿namespace Zeta.Foundation
 {
     using System;
+    using System.IO;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc.Testing;
     using Microsoft.AspNetCore.TestHost;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
@@ -53,8 +55,15 @@
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<TStartup>();
-                    webBuilder.ConfigureLogging(loggingBuilder => loggingBuilder
+                    webBuilder.ConfigureLogging(builder => builder
                         .Services.AddSingleton<ILoggerProvider>(sp => new XUnitLoggerProvider(this.testOutputHelper)));
+                    webBuilder.ConfigureAppConfiguration((context, builder) =>
+                    {
+                        builder
+                         .SetBasePath(Directory.GetCurrentDirectory())
+                         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                         .AddEnvironmentVariables();
+                    });
                     webBuilder.ConfigureTestServices(services =>
                     {
                         this.servicesConfiguration?.Invoke(services);
