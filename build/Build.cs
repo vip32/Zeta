@@ -22,7 +22,7 @@ using static Nuke.Common.Tools.NSwag.NSwagTasks;
 [CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
 [GitHubActions("github-actions",
-    GitHubActionsImage.UbuntuLatest,
+    GitHubActionsImage.WindowsLatest,
     AutoGenerate = true,
     PublishArtifacts = true,
     InvokedTargets = new[] { nameof(Test), nameof(Pack) },
