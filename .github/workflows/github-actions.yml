@@ -32,8 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Run './build.cmd Test Push'
-        run: ./build.cmd Test Push
+      - name: Run './build.cmd Test Pack'
+        run: ./build.cmd Test Pack
         env:
             NugetApiKey: ${{ secrets.NugetApiKey }}
       - uses: actions/upload-artifact@v1

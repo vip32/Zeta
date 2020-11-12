@@ -72,12 +72,3 @@ stages:
             inputs:
               artifactName: .nuget
               pathtoPublish: 'artifacts/.nuget'
-      - job: Push
-        displayName: 'Push'
-        dependsOn: [ Pack ]
-        steps:
-          - task: CmdLine@2
-            inputs:
-              script: './build.cmd Push --skip'
-            env:
-              NugetApiKey: $(NugetApiKey)
