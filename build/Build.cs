@@ -22,7 +22,7 @@ using static Nuke.Common.Tools.NSwag.NSwagTasks;
 [CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
 [GitHubActions("github-actions",
-    GitHubActionsImage.WindowsLatest,
+    GitHubActionsImage.UbuntuLatest,
     AutoGenerate = true,
     PublishArtifacts = true,
     InvokedTargets = new[] { nameof(Test), nameof(Pack) },
@@ -30,7 +30,7 @@ using static Nuke.Common.Tools.NSwag.NSwagTasks;
     OnPullRequestBranches = new[] { "features/*" },
     ImportSecrets = new[] { nameof(NugetApiKey) })]
 [AzurePipelines(
-    AzurePipelinesImage.WindowsLatest,
+    AzurePipelinesImage.UbuntuLatest,
     AutoGenerate = true,
     InvokedTargets = new[] { nameof(Test), nameof(Pack) },
     TriggerBranchesInclude = new[] { "master", "develop", "features/*", "refs/tags/v*" },
