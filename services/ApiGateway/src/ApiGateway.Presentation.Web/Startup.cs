@@ -18,7 +18,6 @@
     using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Logging;
     using Microsoft.IdentityModel.Tokens;
-    using Microsoft.ReverseProxy.Configuration.Contract;
     using NSwag;
     using NSwag.AspNetCore;
     using NSwag.Generation.AspNetCore;
@@ -55,24 +54,9 @@
 
             services.AddControllers();
 
-            services.AddReverseProxy() // TODO: move to extension method
-                .LoadFromConfig(this.Configuration.GetSection("ReverseProxy"));
-            foreach (var cluster in
-                this.Configuration.GetSection("ReverseProxy")
-                                  .Get<ConfigurationData>()?.Clusters.Safe())
-            {
-                foreach (var destination in cluster.Value?.Destinations.Safe())
-                {
-                    if (!string.IsNullOrEmpty(destination.Value?.Address))
-                    {
-                        services.AddHealthChecks()
-                            .AddUrlGroup(
-                                new Uri(destination.Value?.Address),
-                                name: destination.Key,
-                                tags: new string[] { destination.Key });
-                    }
-                }
-            }
+            services.AddReverseProxy()
+                .LoadFromConfig(this.Configuration.GetSection("ReverseProxy"))
+                .AddHealthChecks(this.Configuration.GetSection("ReverseProxy"), services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
