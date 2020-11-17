@@ -74,6 +74,11 @@ GET https://localhost:6100/api/v1/_echo HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
+### API get Api Gateway systeminformation                                                      #
+GET https://localhost:6100/api/v1/_systeminformation HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
 ###################################################################################
 ### API get Customers Service health (Gateway)                                             #
 GET https://localhost:6100/customers/health HTTP/1.1
@@ -89,6 +94,11 @@ GET http://localhost:6001/api/v1/_echo HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
+### API get Customers Service systeminformation (Direct)                                                      #
+GET http://localhost:6001/api/v1/_systeminformation HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
 ###################################################################################
 ### API get Orders Service health (Gateway)h                                                 #
 GET https://localhost:6100/orders/health HTTP/1.1
@@ -101,5 +111,10 @@ Content-Type: application/json
 
 ### API get Orders Service echo (Direct)                                          #
 GET http://localhost:6002/api/v1/_echo HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+### API get Orders Service systeminformation (Direct)                                                      #
+GET http://localhost:6002/api/v1/_systeminformation HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json

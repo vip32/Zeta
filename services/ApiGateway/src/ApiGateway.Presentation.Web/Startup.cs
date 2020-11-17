@@ -43,6 +43,7 @@
 
             services.AddAuthentication(options => this.ConfigureAuthentication(options))
                 .AddJwtBearer(options => this.ConfigureJwtBearer(options));
+            services.AddClaimsTransformation<RoleClaimsTransformer>();
             services.AddAuthorization();
 
             services.AddApiVersioning(options => this.ConfigureApiVersioning(options));
