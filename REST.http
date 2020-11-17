@@ -1,8 +1,13 @@
-@baseUrl = http://localhost:8080/auth/realms/master
+@auth_baseurl = http://localhost:8080
+@auth_realm = master
+@auth_username = admin
+@auth_password = admin
+@client_id = zeta
+@client_secret = zeta
 
 ###################################################################################
 #### AUTH get openid configuration
-GET {{baseUrl}}/.well-known/openid-configuration HTTP/1.1
+GET {{auth_baseurl}}/auth/realms/{{auth_realm}}/.well-known/openid-configuration HTTP/1.1
 Content-Type: application/json
 
 ###################################################################################
@@ -11,15 +16,14 @@ Content-Type: application/json
 @access_token = {{sign_in_password.response.body.$.access_token}}
 @refresh_token = {{sign_in_password.response.body.$.refresh_token}}
 
-POST {{baseUrl}}/protocol/openid-connect/token HTTP/1.1
+POST {{auth_baseurl}}/auth/realms/{{auth_realm}}/protocol/openid-connect/token HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 
 grant_type=password
-&client_id=zeta
-&client_secret=zeta
-&username=admin
-&password=admin
-
+&client_id={{client_id}}
+&client_secret={{client_secret}}
+&username={{auth_username}}
+&password={{auth_password}}
 
 ###################################################################################
 ### AUTH sign in (client_credentials)
@@ -27,16 +31,22 @@ grant_type=password
 @access_token = {{sign_in_client_credentials.response.body.$.access_token}}
 @refresh_token = {{sign_in_client_credentials.response.body.$.refresh_token}}
 
-POST {{baseUrl}}/protocol/openid-connect/token HTTP/1.1
+POST {{auth_baseurl}}/auth/realms/{{auth_realm}}/protocol/openid-connect/token HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 
 grant_type=client_credentials
-&client_id=zeta
-&client_secret=zeta
+&client_id={{client_id}}
+&client_secret={{client_secret}}
 
 ###################################################################################
 ### AUTH get user info
-GET {{baseUrl}}/protocol/openid-connect/userinfo HTTP/1.1
+GET {{auth_baseurl}}/auth/realms/{{auth_realm}}/protocol/openid-connect/userinfo HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###################################################################################
+### AUTH get account info
+GET {{auth_baseurl}}/auth/realms/{{auth_realm}}/account HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
@@ -46,13 +56,12 @@ Content-Type: application/json
 # @access_token = {{refresh_token_request.response.body.$.access_token}}
 # @refresh_token = {{refresh_token_request.response.body.$.refresh_token}}
 
-POST {{baseUrl}}/protocol/openid-connect/token HTTP/1.1
+POST {{auth_baseurl}}/auth/realms/{{auth_realm}}/protocol/openid-connect/token HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 
 grant_type=refresh_token
-&client_id=zeta
-&client_secret=zeta
-&resource=zeta
+&client_id={{client_id}}
+&client_secret={{client_secret}}
 &refresh_token={{refresh_token}}
 
 ###################################################################################
