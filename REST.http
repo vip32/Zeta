@@ -71,7 +71,6 @@ Content-Type: application/json
 
 ### API get Api Gateway echo                                                      #
 GET https://localhost:6100/api/v1/_echo HTTP/1.1
-Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 ### API get Api Gateway systeminformation                                                      #
@@ -86,7 +85,6 @@ Content-Type: application/json
 
 ### API get Customers Service echo (Gateway)                                              #
 GET https://localhost:6100/customers/api/v1/_echo HTTP/1.1
-Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 ### API get Customers Service echo (Direct)                                       #
@@ -106,7 +104,6 @@ Content-Type: application/json
 
 ### API get Orders Service echo (Gateway)                                                 #
 GET https://localhost:6100/orders/api/v1/_echo HTTP/1.1
-Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 ### API get Orders Service echo (Direct)                                          #
