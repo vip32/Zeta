@@ -11,18 +11,18 @@
     "activityBar.inactiveForeground": "#e7e7e799",
     "activityBarBadge.background": "#031d09",
     "activityBarBadge.foreground": "#e7e7e7",
-    "editorGroup.border": "#9c3210",
-    "panel.border": "#9c3210",
-    "sideBar.border": "#9c3210",
     "statusBar.background": "#6e230b",
-    "statusBar.border": "#6e230b",
     "statusBar.foreground": "#e7e7e7",
     "statusBarItem.hoverBackground": "#9c3210",
     "titleBar.activeBackground": "#6e230b",
     "titleBar.activeForeground": "#e7e7e7",
-    "titleBar.border": "#6e230b",
     "titleBar.inactiveBackground": "#6e230b99",
-    "titleBar.inactiveForeground": "#e7e7e799"
-  },
-  "peacock.color": "#6e230b"
+    "titleBar.inactiveForeground": "#e7e7e799",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#9c3210",
+    "statusBarItem.remoteBackground": "#6e230b",
+    "statusBarItem.remoteForeground": "#e7e7e7"
+},
+"peacock.color": "#6e230b",
+"dotnet.defaultSolution": "Zeta.sln"
 }
